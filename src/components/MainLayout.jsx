@@ -27,8 +27,8 @@ import {
   Menu as TailwindMenu,
   MenuButton as TailwindMenuButton,
   MenuItems as TailwindMenuItems,
-  MenuItem as TailwindMenuItem
-} from '@headlessui/react';
+  MenuItem as TailwindMenuItem,
+} from "@headlessui/react";
 
 function MainLayout() {
   const [collapsed, setCollapsed] = useState(false);
@@ -75,7 +75,7 @@ function MainLayout() {
                 {
                   key: "brand",
                   icon: <SiBrandfolder />,
-                  label: "Brand",
+                  label: <Link to="/admin/add-brand">Add Brand</Link>,
                 },
                 {
                   key: "brand-list",
@@ -95,7 +95,7 @@ function MainLayout() {
                 {
                   key: "color",
                   icon: <IoIosColorPalette />,
-                  label: "Color",
+                  label: <Link to="/admin/add-color">Add Color</Link>,
                 },
                 {
                   key: "color-list",
@@ -117,7 +117,7 @@ function MainLayout() {
                 {
                   key: "add-blog",
                   icon: <BiLogoBlogger />,
-                  label: "Add blog",
+                  label: <Link to="/admin/add-blog">Add blog</Link>,
                 },
                 {
                   key: "blog-list",
@@ -127,7 +127,7 @@ function MainLayout() {
                 {
                   key: "add-blog-category",
                   icon: <MdOutlineCategory />,
-                  label: "Add Blog Category",
+                  label:<Link to="/admin/add-blog-category">Add Blog Category</Link>
                 },
                 {
                   key: "blog-category-list",
@@ -164,41 +164,41 @@ function MainLayout() {
           />
 
           <div>
-          <TailwindMenu as="div" className="relative mt-2 mx-5">
-            <div>
-              <TailwindMenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                <span className="absolute -inset-1.5" />
-                <span className="sr-only">Open user menu</span>
-                <img
-                  alt=""
-                  src="../src/assets/photo.png"
-                  className="h-12 w-12 rounded-full object-cover"
-                />
-              </TailwindMenuButton>
-            </div>
-            <TailwindMenuItems
-              transition
-              className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-            >
-              <TailwindMenuItem>
-                <Link
-                  to="/profile"
-                  className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-                >
-                  Your Profile
-                </Link>
-              </TailwindMenuItem>
-              
-              <TailwindMenuItem>
-                <Link
-                  to="#"
-                  className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-                >
-                  Sign out
-                </Link>
-              </TailwindMenuItem>
-            </TailwindMenuItems>
-          </TailwindMenu>
+            <TailwindMenu as="div" className="relative mt-2 mx-5">
+              <div>
+                <TailwindMenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                  <span className="absolute -inset-1.5" />
+                  <span className="sr-only">Open user menu</span>
+                  <img
+                    alt=""
+                    src="../src/assets/photo.png"
+                    className="h-12 w-12 rounded-full object-cover"
+                  />
+                </TailwindMenuButton>
+              </div>
+              <TailwindMenuItems
+                transition
+                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+              >
+                <TailwindMenuItem>
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                  >
+                    Your Profile
+                  </Link>
+                </TailwindMenuItem>
+
+                <TailwindMenuItem>
+                  <Link
+                    to="#"
+                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                  >
+                    Sign out
+                  </Link>
+                </TailwindMenuItem>
+              </TailwindMenuItems>
+            </TailwindMenu>
           </div>
         </Header>
 
