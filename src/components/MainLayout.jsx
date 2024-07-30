@@ -50,7 +50,7 @@ function MainLayout() {
             {
               key: "dashboard",
               icon: <RiDashboardFill />,
-              label: "Dashboard",
+              label: <Link to="/admin">Dashboard</Link>,
             },
             {
               key: "customers",
@@ -139,7 +139,7 @@ function MainLayout() {
             {
               key: "enquires",
               icon: <CiCircleList />,
-              label: "Enquires",
+              label: <Link to="/admin/enquires">Enquires</Link>,
             },
           ]}
         />
