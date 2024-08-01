@@ -75,6 +75,7 @@ function Brands() {
       </div>
     ),
   }));
+  
 
   return (
     <section className="mt-4">
