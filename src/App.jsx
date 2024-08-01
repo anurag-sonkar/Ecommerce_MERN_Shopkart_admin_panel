@@ -11,12 +11,21 @@ import AddBlog from './pages/AddBlog'
 import AddBlogCategory from './pages/AddBlogCategory'
 import AddColor from './pages/AddColor'
 import AddBrand from './pages/AddBrand'
+import AddProduct from './pages/AddProduct'
+import SignupForm from './pages/Authentication/Signup/Signup'
+import LoginForm from './pages/Authentication/Login/Login'
+import Customers from './pages/Customers'
+import Products from './pages/Products'
+import Brands from './pages/Brands'
 
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<AuthenticationForm />} />
+      <Route path='/signup' element={<SignupForm />} />
+      <Route path='/login' element={<LoginForm />} />
+
       <Route path='/reset-password' element={<ResetPassword />} />
       <Route path='/forgot-password' element={<ForgotPassword />} />
 
@@ -27,6 +36,10 @@ function App() {
         <Route path='add-blog-category' element={<AddBlogCategory/>} />
         <Route path='add-brand' element={<AddBrand/>} />
         <Route path='add-color' element={<AddColor/>} />
+        <Route path='add-product' element={<AddProduct/>} />
+        <Route path='customers' element={<Customers/>} />
+        <Route path='products' element={<Products/>} />
+        <Route path='brands' element={<Brands/>} />
 
       </Route>
     </Routes>

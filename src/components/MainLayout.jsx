@@ -55,7 +55,7 @@ function MainLayout() {
             {
               key: "customers",
               icon: <RiCustomerService2Line />,
-              label: "Customers",
+              label: <Link to="/admin/customers">Customers</Link>,
             },
             {
               key: "catalog",
@@ -63,14 +63,14 @@ function MainLayout() {
               label: "Catalog",
               children: [
                 {
-                  key: "product",
+                  key: "add-product",
                   icon: <FaProductHunt />,
-                  label: "Add Product",
+                  label: <Link to='/admin/add-product'>Add Product</Link>,
                 },
                 {
                   key: "product-list",
                   icon: <CiCircleList />,
-                  label: "Product List",
+                  label: <Link to='/admin/products'>Products List</Link>,
                 },
                 {
                   key: "brand",
@@ -80,7 +80,7 @@ function MainLayout() {
                 {
                   key: "brand-list",
                   icon: <CiCircleList />,
-                  label: "Brand List",
+                  label: <Link to='/admin/brands'>Brand List</Link>,
                 },
                 {
                   key: "category",
