@@ -5,6 +5,7 @@ import productsReducers from "../features/products/productSlice";
 import brandsReducers from "../features/brands/brandsSlice";
 import productCategoryReducers from "../features/productCategory/productCategorySlice"
 import blogCategoryReducers from "../features/blogCategory/blogCategorySlice"
+import colorsReducers from "../features/color/colorSlice"
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     brands : brandsReducers,
     productCategory:productCategoryReducers,
     blogCategory:blogCategoryReducers,
+    colors:colorsReducers
   },
 });

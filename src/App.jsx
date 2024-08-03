@@ -21,6 +21,7 @@ import Error from './pages/Error'
 import AddProductCategory from './pages/AddProductCategory'
 import ProductsCategory from './pages/ProductsCategory'
 import BlogsCategory from './pages/BlogsCategory'
+import Colors from './pages/Colors'
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
         <Route path='brands' element={<Brands/>} />
         <Route path='products-category-list' element={<ProductsCategory/>} />
         <Route path='blogs-category-list' element={<BlogsCategory/>} />
+        <Route path='color-list' element={<Colors/>} />
 
       </Route>
       <Route path='*' element={<Error/>} />

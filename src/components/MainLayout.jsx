@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -32,9 +32,35 @@ import {
 
 function MainLayout() {
   const [collapsed, setCollapsed] = useState(false);
+  const [selectedKey, setSelectedKey] = useState("dashboard");
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  useEffect(() => {
+    const storedSelectedKey = localStorage.getItem("selectedKey");
+    const storedCollapsedState = localStorage.getItem("collapsed");
+
+    if (storedSelectedKey) {
+      setSelectedKey(storedSelectedKey);
+    }
+    if (storedCollapsedState) {
+      setCollapsed(storedCollapsedState === "true");
+    }
+  }, []);
+
+  const handleMenuClick = ({ key }) => {
+    setSelectedKey(key);
+    localStorage.setItem("selectedKey", key);
+  };
+
+  const toggleCollapsed = () => {
+    const newCollapsedState = !collapsed;
+    setCollapsed(newCollapsedState);
+    localStorage.setItem("collapsed", newCollapsedState);
+  };
+
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -45,7 +71,8 @@ function MainLayout() {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["dashboard"]}
+          selectedKeys={[selectedKey]}
+          onClick={handleMenuClick}
           items={[
             {
               key: "dashboard",
@@ -100,7 +127,7 @@ function MainLayout() {
                 {
                   key: "color-list",
                   icon: <CiCircleList />,
-                  label: "Color List",
+                  label: <Link to="/admin/color-list">Color List</Link>,
                 },
               ],
             },
@@ -155,14 +182,13 @@ function MainLayout() {
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={toggleCollapsed}
             style={{
               fontSize: "16px",
               width: 64,
               height: 64,
             }}
           />
-
           <div>
             <TailwindMenu as="div" className="relative mt-2 mx-5">
               <div>
@@ -188,7 +214,6 @@ function MainLayout() {
                     Your Profile
                   </Link>
                 </TailwindMenuItem>
-
                 <TailwindMenuItem>
                   <Link
                     to="#"
@@ -201,13 +226,11 @@ function MainLayout() {
             </TailwindMenu>
           </div>
         </Header>
-
         <Content
           style={{
             margin: "8px 16px",
             padding: 0,
             minHeight: 280,
-            // background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
         >
