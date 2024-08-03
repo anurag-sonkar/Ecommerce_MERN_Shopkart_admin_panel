@@ -83,14 +83,14 @@ function MainLayout() {
                   label: <Link to='/admin/brands'>Brand List</Link>,
                 },
                 {
-                  key: "category",
+                  key: "add-product-category",
                   icon: <MdOutlineCategory />,
-                  label: "Category",
+                  label: <Link to='/admin/add-product-category'>Add Product Category</Link>
                 },
                 {
-                  key: "category-list",
+                  key: "products-category-list",
                   icon: <CiCircleList />,
-                  label: "Category List",
+                  label:  <Link to='/admin/products-category-list'>Product Categories List</Link>
                 },
                 {
                   key: "color",

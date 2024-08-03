@@ -29,8 +29,7 @@ export const createBrand = createAsyncThunk('brands/createBrand', async (brand, 
 
 export const deleteBrand = createAsyncThunk('brands/deleteBrand', async (id, thunkAPI) => {
   try {
-    await brandsService.deleteBrand(id);
-    return await brandsService.getAllBrands(); // Fetch updated list of brands after deletion
+    return await brandsService.deleteBrand(id);
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.error) || error.message || error.toString();
     return thunkAPI.rejectWithValue(message);
@@ -39,8 +38,7 @@ export const deleteBrand = createAsyncThunk('brands/deleteBrand', async (id, thu
 
 export const updateBrand = createAsyncThunk('brands/updateBrand', async (update, thunkAPI) => {
   try {
-    await brandsService.updateBrand(update.updatedBrand, update.updateId);
-    return await brandsService.getAllBrands(); // Fetch updated list of brands after update
+    return await brandsService.updateBrand(update.updatedBrand, update.updateId);
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.error) || error.message || error.toString();
     return thunkAPI.rejectWithValue(message);
@@ -59,14 +57,15 @@ const brandsSlice = createSlice({
       .addCase(getAllBrands.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.brands = action.payload;
+        state.brands = action.payload.response;
+        state.message = action.payload.message;
       })
       .addCase(getAllBrands.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.brands = [];
-        state.message = action.payload;
+        state.message = action.payload.message;
       })
       .addCase(createBrand.pending, (state) => {
         state.isLoading = true;
@@ -88,7 +87,8 @@ const brandsSlice = createSlice({
       .addCase(deleteBrand.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.brands = action.payload; 
+        state.brands = action.payload.response; 
+        state.message = action.payload.message;
       })
       .addCase(deleteBrand.rejected, (state, action) => {
         state.isLoading = false;
@@ -101,13 +101,13 @@ const brandsSlice = createSlice({
       .addCase(updateBrand.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.brands = action.payload; 
+        state.brands = action.payload.response; 
         state.message = action.payload.message
       })
       .addCase(updateBrand.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.message = action.payload.message;
       });
   }
 });

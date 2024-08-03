@@ -17,6 +17,9 @@ import LoginForm from './pages/Authentication/Login/Login'
 import Customers from './pages/Customers'
 import Products from './pages/Products'
 import Brands from './pages/Brands'
+import Error from './pages/Error'
+import AddProductCategory from './pages/AddProductCategory'
+import ProductsCategory from './pages/ProductsCategory'
 
 
 function App() {
@@ -34,14 +37,17 @@ function App() {
         <Route path='enquires' element={<Enquires/>} />
         <Route path='add-blog' element={<AddBlog/>} />
         <Route path='add-blog-category' element={<AddBlogCategory/>} />
+        <Route path='add-product-category' element={<AddProductCategory/>} />
         <Route path='add-brand' element={<AddBrand/>} />
         <Route path='add-color' element={<AddColor/>} />
         <Route path='add-product' element={<AddProduct/>} />
         <Route path='customers' element={<Customers/>} />
         <Route path='products' element={<Products/>} />
         <Route path='brands' element={<Brands/>} />
+        <Route path='products-category-list' element={<ProductsCategory/>} />
 
       </Route>
+      <Route path='*' element={<Error/>} />
     </Routes>
   )
 }

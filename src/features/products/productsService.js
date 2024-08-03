@@ -3,20 +3,18 @@ import { products_base_url } from "../../utils/base_url";
 import { config } from "../../utils/config";
 
 const getAllProducts = async () => {
-  const user = localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user"))
-    : null;
-  let token;
-  if (user) {
-    token = user.result.token;
-  }
   const response = await axios.get(`${products_base_url}/`, config);
-console.log(response.data.products)
-  return response.data.products;
+  return response.data;
 };
+
+const deleteProduct = async (id)=>{
+  const response = await axios.delete(`${products_base_url}/${id}` , config)
+  return response.data
+}
 
 const productsService = {
   getAllProducts,
+  deleteProduct
 };
 
 export default productsService;

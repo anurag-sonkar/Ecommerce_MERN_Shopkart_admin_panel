@@ -9,19 +9,16 @@ function AddBrand() {
   const { brands, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.brands
   );
-
   const addNewBrand = ()=>{
-    console.log("ji")
     if(!brand){
       alert("field is empty")
       return
     }
 
     dispatch(createBrand({brand}))
-
-
-
   }
+
+  
   return (
     <div className="">
       <h1 className="text-4xl font-semibold">Add Brand</h1>

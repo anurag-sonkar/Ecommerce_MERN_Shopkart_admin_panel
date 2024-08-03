@@ -4,18 +4,17 @@ import { config } from "../../utils/config";
 
 const getAllBrands = async () => {
   const response = await axios.get(`${brands_base_url}/`, config);
-  return response.data.response;
+  return response.data;
 };
 
 const createBrand = async (brand) => {
     const response = await axios.post(`${brands_base_url}/`, {title:brand}, config);
     
-    console.log(response)
     return response.data;
-};
-
-const deleteBrand = async (id) => {
-  const response = await axios.delete(`${brands_base_url}/${id}`, config);
+  };
+  
+  const deleteBrand = async (id) => {
+    const response = await axios.delete(`${brands_base_url}/${id}`, config);
   return response.data;
 };
 

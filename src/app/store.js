@@ -3,12 +3,14 @@ import authReducer from "../features/auth/authSlice";
 import customersReducers from "../features/customers/customersSlice";
 import productsReducers from "../features/products/productSlice";
 import brandsReducers from "../features/brands/brandsSlice";
+import productCategoryReducers from "../features/productCategory/productCategorySlice"
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     customers: customersReducers,
     products: productsReducers,
-    brands : brandsReducers
+    brands : brandsReducers,
+    productCategory:productCategoryReducers,
   },
 });
