@@ -134,7 +134,7 @@ function MainLayout() {
             {
               key: "orders",
               icon: <AiOutlineDropbox />,
-              label: "Orders",
+              label: <Link to="/admin/orders">Orders</Link>,
             },
             {
               key: "blogs",
