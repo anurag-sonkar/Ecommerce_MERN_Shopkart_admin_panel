@@ -7,6 +7,7 @@ import productCategoryReducers from "../features/productCategory/productCategory
 import blogCategoryReducers from "../features/blogCategory/blogCategorySlice"
 import colorsReducers from "../features/color/colorSlice"
 import enquriesReducers from "../features/enquires/enquiresSlice"
+import ordersReducers from "../features/orders/ordersSlice"
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     productCategory:productCategoryReducers,
     blogCategory:blogCategoryReducers,
     colors:colorsReducers,
-    enquries:enquriesReducers
+    enquries:enquriesReducers,
+    orders : ordersReducers,
   },
 });

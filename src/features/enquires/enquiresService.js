@@ -4,6 +4,7 @@ import { config } from "../../utils/config";
 
 const getAllEnquires = async () => {
   const response = await axios.get(`${enquiry_base_url}/`, config);
+//   console.log(response)
   return response.data;
 };
 
