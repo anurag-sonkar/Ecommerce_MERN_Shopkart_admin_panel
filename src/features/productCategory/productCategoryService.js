@@ -4,13 +4,11 @@ import { config } from "../../utils/config";
 
 const getAllProductsCategory = async () => {
   const response = await axios.get(`${product_category_base_url}/`);
-  console.log(response)
   return response.data;
 };
 
 const createProductsCategory = async (productCategory) => {
     const response = await axios.post(`${product_category_base_url}/`, { title: productCategory }, config);
-    console.log(response.data)
     return response.data;
 };
 
@@ -25,6 +23,7 @@ const updateProductsCategory = async (updateProductCategory, id) => {
       { title: updateProductCategory },
       config
     );
+    console.log(response)
     return response.data;
 };
 

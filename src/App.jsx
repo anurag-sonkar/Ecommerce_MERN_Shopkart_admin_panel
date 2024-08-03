@@ -20,6 +20,7 @@ import Brands from './pages/Brands'
 import Error from './pages/Error'
 import AddProductCategory from './pages/AddProductCategory'
 import ProductsCategory from './pages/ProductsCategory'
+import BlogsCategory from './pages/BlogsCategory'
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <Route path='products' element={<Products/>} />
         <Route path='brands' element={<Brands/>} />
         <Route path='products-category-list' element={<ProductsCategory/>} />
+        <Route path='blogs-category-list' element={<BlogsCategory/>} />
 
       </Route>
       <Route path='*' element={<Error/>} />

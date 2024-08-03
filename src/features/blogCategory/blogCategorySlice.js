@@ -1,19 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import productCategoryService from "./productCategoryService";
+import blogCategoryService from "./blogCategoryService";
 
 const initialState = {
-  productsCategory: [],
+  blogsCategories: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
   message: "",
 };
 
-export const getAllProductsCategory = createAsyncThunk(
-  "productsCategory/getProductsCategory",
+export const getAllBlogsCategory = createAsyncThunk(
+  "blogsCategory/getAllBlogsCategory",
   async (_, thunkAPI) => {
     try {
-      return await productCategoryService.getAllProductsCategory();
+      return await blogCategoryService.getAllBlogsCategory();
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -24,11 +24,11 @@ export const getAllProductsCategory = createAsyncThunk(
   }
 );
 
-export const createProductsCategory = createAsyncThunk(
-  "productsCategory/createProductsCategory",
-  async (productCategory, thunkAPI) => {
+export const createBlogsCategory = createAsyncThunk(
+  "blogsCategory/createBlogsCategory",
+  async (blogCategory, thunkAPI) => {
     try {
-      return await productCategoryService.createProductsCategory(productCategory.productCategory);
+      return await blogCategoryService.createBlogsCategory(blogCategory.blogCategory);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -39,11 +39,11 @@ export const createProductsCategory = createAsyncThunk(
   }
 );
 
-export const deleteProductsCategory = createAsyncThunk(
-  "productsCategory/deleteProductsCategory",
+export const deleteBlogsCategory = createAsyncThunk(
+  "blogsCategory/deleteBlogsCategory",
   async (id, thunkAPI) => {
     try {
-      return await productCategoryService.deleteProductsCategory(id);
+      return await blogCategoryService.deleteBlogsCategory(id);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.error) ||
@@ -54,12 +54,12 @@ export const deleteProductsCategory = createAsyncThunk(
   }
 );
 
-export const updateProductsCategory = createAsyncThunk(
-  "productsCategory/updateProductsCategory",
+export const updateBlogsCategory = createAsyncThunk(
+  "blogsCategory/updateBlogsCategory",
   async (update, thunkAPI) => {
     try {
-      return  await productCategoryService.updateProductsCategory(
-        update.updateProductCategory,
+      return  await blogCategoryService.updateBlogsCategory(
+        update.updateBlogCategory,
         update.updateId
       );
        
@@ -73,66 +73,66 @@ export const updateProductsCategory = createAsyncThunk(
   }
 );
 
-const productCategory = createSlice({
+const blogCategory = createSlice({
   name: "brands",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getAllProductsCategory.pending, (state) => {
+      .addCase(getAllBlogsCategory.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getAllProductsCategory.fulfilled, (state, action) => {
+      .addCase(getAllBlogsCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.message = action.payload.message;
-        state.productsCategory = action.payload.response;
+        state.blogsCategories = action.payload.response;
       })
-      .addCase(getAllProductsCategory.rejected, (state, action) => {
+      .addCase(getAllBlogsCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload.message;
-        state.productsCategory = [];
+        state.blogsCategories = [];
       })
-      .addCase(createProductsCategory.pending, (state) => {
+      .addCase(createBlogsCategory.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createProductsCategory.fulfilled, (state, action) => {
+      .addCase(createBlogsCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.message = action.payload.message;
       })
-      .addCase(createProductsCategory.rejected, (state, action) => {
+      .addCase(createBlogsCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload.message;
       })
-      .addCase(deleteProductsCategory.pending, (state) => {
+      .addCase(deleteBlogsCategory.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(deleteProductsCategory.fulfilled, (state, action) => {
+      .addCase(deleteBlogsCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.productsCategory = action.payload.response;
+        state.blogsCategories = action.payload.response;
         state.message = action.payload.message;
       })
-      .addCase(deleteProductsCategory.rejected, (state, action) => {
+      .addCase(deleteBlogsCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload.message;
       })
-      .addCase(updateProductsCategory.pending, (state) => {
+      .addCase(updateBlogsCategory.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateProductsCategory.fulfilled, (state, action) => {
+      .addCase(updateBlogsCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.productsCategory = action.payload.response;
+        state.blogsCategories = action.payload.response;
         state.message = action.payload.message;
       })
-      .addCase(updateProductsCategory.rejected, (state, action) => {
+      .addCase(updateBlogsCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload.message;
@@ -140,4 +140,4 @@ const productCategory = createSlice({
   },
 });
 
-export default productCategory.reducer;
+export default blogCategory.reducer;

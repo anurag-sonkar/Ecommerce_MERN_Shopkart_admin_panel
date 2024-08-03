@@ -130,9 +130,9 @@ function MainLayout() {
                   label:<Link to="/admin/add-blog-category">Add Blog Category</Link>
                 },
                 {
-                  key: "blog-category-list",
+                  key: "blogs-category-list",
                   icon: <CiCircleList />,
-                  label: "Blog Category List",
+                  label: <Link to="/admin/blogs-category-list">Blog Category</Link>
                 },
               ],
             },
