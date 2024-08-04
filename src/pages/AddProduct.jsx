@@ -1,13 +1,39 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import JoditEditor from "jodit-react";
-import { Button, Input, Select, Option } from "@material-tailwind/react";
-import { InboxOutlined } from "@ant-design/icons";
-import { message, Upload } from "antd";
-const { Dragger } = Upload;
+import { Button, Input, Select } from "@material-tailwind/react";
+import {Select as ANTDSelect} from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllBrands } from "../features/brands/brandsSlice";
+import { getAllProductsCategory } from "../features/productCategory/productCategorySlice";
+import { getAllColors } from "../features/color/colorSlice";
+import { createProduct } from "../features/products/productSlice";
+
+
 
 function AddProduct({ placeholder }) {
   const editor = useRef(null);
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(null);
+  const [quantity, setQuantity] = useState(null);
+  const [brand, setBrand] = useState("");
+  const [category, setCategory] = useState("");
+  const [color, setColor] = useState([]);
+
+  console.log(title, description, price, quantity, brand, category, color);
+
+  const dispatch = useDispatch();
+
+  const { brands } = useSelector((state) => state.brands);
+  const { productsCategory } = useSelector((state) => state.productCategory);
+  const { colors } = useSelector((state) => state.colors);
+
+  useEffect(() => {
+    dispatch(getAllBrands());
+    dispatch(getAllProductsCategory());
+    dispatch(getAllColors());
+  }, [dispatch]);
+
   const config = useMemo(
     () => ({
       readonly: false, // all options from https://xdsoft.net/jodit/docs/
@@ -16,77 +42,126 @@ function AddProduct({ placeholder }) {
     [placeholder]
   );
 
-  const props = {
-    name: "file",
-    multiple: true,
-    action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-    onDrop(e) {
-      console.log("Dropped files", e.dataTransfer.files);
-    },
+  const handleChange = (value) => {
+    setColor([...value]);
   };
+
+  const handleAddProduct = () => {
+    dispatch(
+      createProduct({
+        title,
+        description,
+        price,
+        quantity,
+        brand,
+        category,
+        color,
+      })
+    );
+  };
+
+  /* upload */
+
+  const colorOptions = colors.map((color) => ({
+    label: color.color,
+    value: color._id,
+    render: () => (
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            width: "20px",
+            height: "20px",
+            backgroundColor: color.color,
+            marginRight: "8px",
+            borderRadius: "50%",
+          }}
+        ></div>
+        <span style={{ color: "black" }}>{color.color}</span>
+      </div>
+    ),
+  }));
+
   return (
     <div>
       <h1 className="text-4xl font-semibold">Add Product</h1>
       <form className="grid gap-8 mt-8">
         <div className="w-full grid gap-6">
-          <Input label="Enter Product Title" type="text"/>
+          <Input
+            label="Enter Product Title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
           <JoditEditor
             ref={editor}
-            value={content}
+            value={description}
             config={config}
             tabIndex={1} // tabIndex of textarea
-            onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-            onChange={(newContent) => {}}
+            onChange={(value) => setDescription(value)}
           />
-          <Input label="Enter Product Price" />
-          <Input label="Enter Product Quantity" type="number"/>
+          <Input
+            label="Enter Product Price"
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+          <Input
+            label="Enter Product Quantity"
+            type="number"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+          />
           <div className="w-full">
-            <Select label="Select Brand">
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
+            <Select
+              label="Select Brand"
+              value={brand}
+              onChange={(value) => setBrand(value)}
+            >
+              {brands &&
+                brands.map((brand) => (
+                  <Select.Option key={brand._id} value={brand.title}>
+                    {brand.title}
+                  </Select.Option>
+                ))}
             </Select>
           </div>
           <div className="w-full">
-            <Select label="Select Category">
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
+            <Select
+              label="Select Category"
+              value={category}
+              onChange={(value) => setCategory(value)}
+            >
+              {productsCategory &&
+                productsCategory.map((category) => (
+                  <Select.Option key={category._id} value={category.title}>
+                    {category.title}
+                  </Select.Option>
+                ))}
             </Select>
           </div>
           <div className="w-full">
-            <Select label="Select Color">
-              <Option>Material Tailwind HTML</Option>
-              <Option>Material Tailwind React</Option>
-            </Select>
+            <ANTDSelect
+              mode="multiple"
+              style={{
+                width: "100%",
+                height: "2.6rem",
+                backgroundColor: "#F5F5F5",
+              }}
+              placeholder="Select Colors"
+              onChange={handleChange}
+              options={colorOptions.map((option) => ({
+                value: option.value,
+                label: option.render(),
+              }))}
+            />
           </div>
           {/* upload */}
-      <div>
-        <Dragger {...props}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p className="ant-upload-hint">
-            Support for a single or bulk upload. Strictly prohibited from
-            uploading company data or other banned files.
-          </p>
-        </Dragger>
-      </div>
+          <div>
+            
+          </div>
         </div>
         <div>
-          <Button>Add Product</Button>
+          <Button onClick={handleAddProduct}>Add Product</Button>
         </div>
       </form>
     </div>

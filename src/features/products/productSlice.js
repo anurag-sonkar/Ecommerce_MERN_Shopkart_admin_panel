@@ -26,6 +26,16 @@ export const deleteProduct = createAsyncThunk('products/deleteProduct', async (i
   }
 });
 
+export const createProduct = createAsyncThunk('products/createProduct' , async(product , thunkAPI)=>{
+  try {
+    return await productsService.createProduct(product)
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.error) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+
+})
+
 const productsSlice = createSlice({
   name: 'products',
   initialState,
@@ -38,7 +48,7 @@ const productsSlice = createSlice({
       .addCase(getAllProducts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.products = action.payload.products;
+        state.products = action.payload.response;
         state.message = action.payload.message;
       })
       .addCase(getAllProducts.rejected, (state, action) => {
@@ -58,6 +68,22 @@ const productsSlice = createSlice({
 
       })
       .addCase(deleteProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.products = [];
+        state.message = action.payload.message;
+      })
+      .addCase(createProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        // state.products = action.payload.response;
+
+      })
+      .addCase(createProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

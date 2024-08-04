@@ -12,7 +12,7 @@ function Colors() {
   const { colors, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.colors
   );
-  console.log({ colors, isLoading, isError, isSuccess, message })
+  // console.log({ colors, isLoading, isError, isSuccess, message })
 
   const [updatedColor, setUpdatedColor] = useState("");
   const [updateId, setUpdateId] = useState("");
