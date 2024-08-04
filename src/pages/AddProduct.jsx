@@ -1,33 +1,52 @@
-import React, { useState, useRef, useMemo, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useMemo,
+  useEffect,
+  useCallback,
+} from "react";
 import JoditEditor from "jodit-react";
 import { Button, Input, Select } from "@material-tailwind/react";
-import {Select as ANTDSelect} from "antd";
+import { Select as ANTDSelect } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBrands } from "../features/brands/brandsSlice";
 import { getAllProductsCategory } from "../features/productCategory/productCategorySlice";
 import { getAllColors } from "../features/color/colorSlice";
 import { createProduct } from "../features/products/productSlice";
-
-
+import { useDropzone } from "react-dropzone";
+import { deleteImages, uploadImages } from "../features/upload/uploadSlice";
+import { RxCross2 } from "react-icons/rx";
 
 function AddProduct({ placeholder }) {
   const editor = useRef(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(null);
-  const [quantity, setQuantity] = useState(null);
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [color, setColor] = useState([]);
 
-  console.log(title, description, price, quantity, brand, category, color);
-
+  
+  // console.log(title, description, price, quantity, brand, category, color);
+  
   const dispatch = useDispatch();
-
+  
   const { brands } = useSelector((state) => state.brands);
   const { productsCategory } = useSelector((state) => state.productCategory);
   const { colors } = useSelector((state) => state.colors);
+  const { uploads, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.imageUpload
+  );
+  
+  const [images , setImages] = useState([])
+  // console.log({ images, isLoading, isError, isSuccess, message });
 
+  useEffect(
+    ()=>{
+      setImages(uploads)
+    },[uploads]
+  )
   useEffect(() => {
     dispatch(getAllBrands());
     dispatch(getAllProductsCategory());
@@ -56,11 +75,18 @@ function AddProduct({ placeholder }) {
         brand,
         category,
         color,
+        images
       })
     );
   };
 
   /* upload */
+  const onDrop = useCallback((acceptedFiles) => {
+    // Do something with the files
+    // console.log(acceptedFiles);
+    dispatch(uploadImages(acceptedFiles));
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const colorOptions = colors.map((color) => ({
     label: color.color,
@@ -156,8 +182,27 @@ function AddProduct({ placeholder }) {
             />
           </div>
           {/* upload */}
-          <div>
-            
+          <div className="w-full border-2 border-gray-400 text-gray-600 border-dashed min-h-32 flex justify-center items-center cursor-pointer text-2xl">
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <p>Drop the files here ...</p>
+              ) : (
+                <p>Drag 'n' drop some files here, or click to select files</p>
+              )}
+            </div>
+          </div>
+
+          {/* upload preview */}
+          <div className="relative flex gap-5 flex-wrap">
+            {uploads &&
+              uploads.length !== 0 &&
+              uploads.map((image) => (
+                <div key={image.asset_id} className="object-contain relative">
+                  <img src={image.url} alt="Uploaded" width={400} height={400} />
+                  <div className="absolute -top-2 -right-2 bg-black rounded-full p-[2px] cursor-pointer" onClick={()=>dispatch(deleteImages(image.public_id))}><RxCross2 color="red" size={18}/></div>
+                </div>
+              ))}
           </div>
         </div>
         <div>
