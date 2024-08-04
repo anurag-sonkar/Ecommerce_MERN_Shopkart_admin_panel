@@ -18,23 +18,6 @@ function Orders() {
     dispatch(updateOrders({ order: value, orderId: id }));
   };
 
-  function formatTimestamp(timestamp) {
-    const date = new Date(timestamp);
-
-    // Extract the date components
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
-    const day = date.getDate().toString().padStart(2, '0');
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-
-    // Format the date and time as DD-MM-YYYY HH:MM:SS
-    const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-
-    return formattedDate;
-  }
-
   useEffect(() => {
     dispatch(getAllOrders());
   }, [dispatch]);
@@ -100,31 +83,17 @@ function Orders() {
     // },
   ];
 
-  const dataSource = orders.map((order, index) => ({
+  const dataSource = orders && orders.length > 0 ? orders.map((order, index) => ({
     key: order._id,
     sno: index + 1,
-    name: order.orderby.name,
-    product: order.products.map((element) => element.product.title + ",").join(" "), // Join product titles with space
+    name: order.orderby?.name || "N/A", // Add a fallback
+    product: order.products && order.products.length !== 0 ? order.products.map((element) => element.product.title).join(", ") : "N/A", // Add a fallback
     amount: order.paymentIntent.amount,
-    // date: formatTimestamp(order.paymentIntent.created),
     date: new Date(order.createdAt).toLocaleString(),
     statusValue: order.orderStatus,
-    // action: (
-    //   <div className="flex items-center gap-5">
-    //     <Link>
-    //       <FaEdit size={20} onClick={() => showModal(color._id, color.color)} />
-    //       <FaEdit size={20} />
-    //     </Link>
-    //     <Link>
-    //       <MdDelete
-    //         size={22}
-    //         color="crimson"
-    //         onClick={() => dispatch(deleteOrders(order._id))}
-    //       />
-    //     </Link>
-    //   </div>
-    // ),
-  }));
+  })) : [];
+  
+  
 
   return (
     <section className="mt-4">

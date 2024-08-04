@@ -20,12 +20,13 @@ const getAllOrders = async () => {
 };
 
 const updateOrders = async (status, id) => {
+  console.log(status,id)
   const response = await axios.put(
     `${orders_base_url}/update-status/${id}`,
     { status: status },
     config
   );
-console.log(response)
+console.log(response.data)
   return response.data;
 };
 
