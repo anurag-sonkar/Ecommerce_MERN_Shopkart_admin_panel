@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Modal, Button, Input, Select, Space } from "antd";
-import Loader from "../components/Loader";
 import {
   deleteProduct,
   getAllProducts,
@@ -9,7 +8,8 @@ import {
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
+import { toast, Bounce } from "react-toastify";
+import Loader from "../components/Loader";
 function Products() {
   const dispatch = useDispatch();
   const { products, isLoading, isError, isSuccess, message } = useSelector(
@@ -44,11 +44,52 @@ function Products() {
 
 
   useEffect(() => {
-    console.log("getAll")
-    dispatch(getAllProducts());
+    const fetchPromise =dispatch(getAllProducts()).unwrap();
+    toast.promise(
+      fetchPromise,
+      {
+        pending: "Fetching products...",
+        // success: "Fetched success!",
+        error: `Fetching failed!`,
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   }, [dispatch]);
 
-  console.log({ products, isLoading, isError, isSuccess, message });
+
+  const handleDelete = (id)=>{
+   const deletePromise =  dispatch(deleteProduct(id)).unwrap()
+   toast.promise(
+    deletePromise,
+    {
+      pending: "Deleting...",
+      // success: "Fetched success!",
+      error: `Deletion failed!`,
+    },
+    {
+      position: "top-right",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    }
+  );
+  }
+  // console.log({ products, isLoading, isError, isSuccess, message });
 
   const columns = [
     {
@@ -110,7 +151,7 @@ function Products() {
           <MdDelete
             size={22}
             color="crimson"
-            onClick={() => dispatch(deleteProduct(product._id))}
+            onClick={() => handleDelete(product._id)}
           />
         </Link>
       </div>
@@ -118,11 +159,11 @@ function Products() {
   }));
 
   return (
-    <section className="mt-4">
+    <section className="mt-4 relative">
       <h1 className="text-3xl font-bold my-4">Products</h1>
-      {isLoading && <Loader />}
+      
       {isError && <p>Error: {message}</p>}
-      {isSuccess && <Table columns={columns} dataSource={dataSource} />}
+      <Table columns={columns} dataSource={dataSource} />
       <>
         <Button type="primary" onClick={showModal}>
           Open Modal with async logic
@@ -174,6 +215,11 @@ function Products() {
           </div>
         </Modal>
       </>
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-full flex justify-center items-center bg-gray-200 bg-opacity-50 min-h-screen h-full">
+          <Loader />
+        </div>
+      )}
     </section>
   );
 }

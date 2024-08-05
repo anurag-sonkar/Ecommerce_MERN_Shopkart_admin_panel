@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Modal, Input } from "antd";
-import Loader from "../components/Loader";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { deleteProductsCategory, getAllProductsCategory, updateProductsCategory } from "../features/productCategory/productCategorySlice";
+import { toast, Bounce } from "react-toastify";
+import Loader from "../components/Loader";
 
 function ProductsCategory() {
   const dispatch = useDispatch();
@@ -24,8 +25,27 @@ function ProductsCategory() {
   };
 
   const handleUpdateBrand = () => {
-    dispatch(updateProductsCategory({ updateProductCategory, updateId }));
+    const updatePromise =  dispatch(updateProductsCategory({ updateProductCategory, updateId })).unwrap();
     setIsModalOpen(false);
+    toast.promise(
+      updatePromise,
+      {
+        pending: 'Updating...',
+        success: 'Updated successfully!',
+        error: `Update failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   };
 
   const handleCancel = () => {
@@ -33,7 +53,26 @@ function ProductsCategory() {
   };
 
   useEffect(() => {
-    dispatch(getAllProductsCategory());
+    const uploadPromise = dispatch(getAllProductsCategory()).unwrap();
+    toast.promise(
+      uploadPromise,
+      {
+        pending: "Fetching category...",
+        // success: "Fetched success!",
+        error: `Fetching failed!`,
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   }, [dispatch]);
 
   const columns = [
@@ -77,11 +116,10 @@ function ProductsCategory() {
   }));
 
   return (
-    <section className="mt-4">
+    <section className="mt-4 relative">
       <h1 className="text-3xl font-bold my-4">Category List</h1>
-      {isLoading && <Loader />}
       {isError && <p>Error: {message}</p>}
-      {isSuccess && <Table dataSource={dataSource} columns={columns} />}
+      <Table dataSource={dataSource} columns={columns} />
       <Modal
         title="Update Category Name"
         open={isModalOpen}
@@ -94,6 +132,12 @@ function ProductsCategory() {
           onChange={(e) => setUpdateProductCategory(e.target.value)}
         />
       </Modal>
+
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-full flex justify-center items-center bg-gray-200 bg-opacity-50 min-h-screen">
+          <Loader />
+        </div>
+      )}
     </section>
   );
 }

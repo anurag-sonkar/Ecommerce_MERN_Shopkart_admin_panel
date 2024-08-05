@@ -16,6 +16,10 @@ import { createProduct } from "../features/products/productSlice";
 import { useDropzone } from "react-dropzone";
 import { deleteImages, uploadImages } from "../features/upload/uploadSlice";
 import { RxCross2 } from "react-icons/rx";
+import { toast ,Bounce} from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
+import ButtonLoader from "../components/ButtonLoader";
 
 function AddProduct({ placeholder }) {
   const editor = useRef(null);
@@ -27,10 +31,10 @@ function AddProduct({ placeholder }) {
   const [category, setCategory] = useState("");
   const [color, setColor] = useState([]);
 
-  
   // console.log(title, description, price, quantity, brand, category, color);
   
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   
   const { brands } = useSelector((state) => state.brands);
   const { productsCategory } = useSelector((state) => state.productCategory);
@@ -53,6 +57,7 @@ function AddProduct({ placeholder }) {
     dispatch(getAllColors());
   }, [dispatch]);
 
+
   const config = useMemo(
     () => ({
       readonly: false, // all options from https://xdsoft.net/jodit/docs/
@@ -66,7 +71,7 @@ function AddProduct({ placeholder }) {
   };
 
   const handleAddProduct = () => {
-    dispatch(
+    const uploadPromise =  dispatch(
       createProduct({
         title,
         description,
@@ -77,15 +82,61 @@ function AddProduct({ placeholder }) {
         color,
         images
       })
+    ).unwrap();
+
+    toast.promise(
+      uploadPromise,
+      {
+        pending: 'Uploading product...',
+        success: 'Upload product successful!',
+        error: `Upload product failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
     );
+
+    uploadPromise.then(()=>{
+      setTimeout(() => {
+        navigate('/admin/products')
+      }, 2500);
+    })
+
+
   };
 
   /* upload */
   const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
-    // console.log(acceptedFiles);
-    dispatch(uploadImages(acceptedFiles));
-  }, []);
+    const uploadPromise = dispatch(uploadImages(acceptedFiles)).unwrap();
+    toast.promise(
+      uploadPromise,
+      {
+        pending: 'Uploading...',
+        success: 'Upload successful!',
+        error: `Upload failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
+  }, [dispatch]);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const colorOptions = colors.map((color) => ({
@@ -108,7 +159,7 @@ function AddProduct({ placeholder }) {
   }));
 
   return (
-    <div>
+    <div className="relative">
       <h1 className="text-4xl font-semibold">Add Product</h1>
       <form className="grid gap-8 mt-8">
         <div className="w-full grid gap-6">
@@ -206,9 +257,15 @@ function AddProduct({ placeholder }) {
           </div>
         </div>
         <div>
-          <Button onClick={handleAddProduct}>Add Product</Button>
+          <Button onClick={handleAddProduct} className="min-w-32 flex justify-center" disabled={isLoading ? true : false}>{isLoading ? <ButtonLoader/> :  "Add Product"}</Button>
         </div>
       </form>
+
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-gray-200 bg-opacity-50">
+          <Loader />
+        </div>
+      )}
     </div>
   );
 }

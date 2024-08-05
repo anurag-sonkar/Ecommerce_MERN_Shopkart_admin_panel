@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUsers } from "../features/customers/customersSlice";
 import { Table } from "antd";
+import { toast ,Bounce} from 'react-toastify';
 import Loader from "../components/Loader";
 
 function Customers() {
@@ -11,7 +12,26 @@ function Customers() {
   );
 
   useEffect(() => {
-    dispatch(getAllUsers());
+    const fetchPromise =  dispatch(getAllUsers()).unwrap();
+    toast.promise(
+      fetchPromise,
+      {
+        pending: 'Fetching... customers',
+        success: 'Fetching customers successfully!',
+        error: `Fetching customers failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   }, [dispatch]);
 
 
@@ -51,11 +71,15 @@ function Customers() {
   }));
 
   return (
-    <section className='mt-4'>
+    <section className='mt-4 relative'>
       <h1 className='text-3xl font-bold my-4'>Recent Orders</h1>
-      {isLoading && <Loader/>}
       {isError && <p>Error: {message}</p>}
-      {isSuccess && <Table dataSource={dataSource} columns={columns} />}
+      <Table dataSource={dataSource} columns={columns} />
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-full min-h-screen h-full flex justify-center items-center bg-gray-200 bg-opacity-50">
+          <Loader />
+        </div>
+      )}
     </section>
   );
 }

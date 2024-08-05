@@ -4,6 +4,7 @@ import { config } from "../../utils/config";
 
 const getAllBrands = async () => {
   const response = await axios.get(`${brands_base_url}/`, config);
+  console.log(response.data)
   return response.data;
 };
 

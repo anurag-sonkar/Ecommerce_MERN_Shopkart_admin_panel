@@ -1,25 +1,65 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Modal, Input, Select, Space } from "antd";
-import Loader from "../components/Loader";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { deleteOrders, getAllOrders, updateOrders } from "../features/orders/ordersSlice";
+import { toast ,Bounce} from 'react-toastify';
+import Loader from "../components/Loader";
 
 function Orders() {
   const dispatch = useDispatch();
   const { orders, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.orders
   );
-  console.log({ orders, isLoading, isError, isSuccess, message });
+  // console.log({ orders, isLoading, isError, isSuccess, message });
 
   const handleChange = (value, id) => {
-    dispatch(updateOrders({ order: value, orderId: id }));
+    const updatePromise = dispatch(updateOrders({ order: value, orderId: id })).unwrap();
+    toast.promise(
+      updatePromise,
+      {
+        pending: 'Updating...',
+        success: 'Status updated successfully!',
+        error: `Status Update failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   };
 
   useEffect(() => {
-    dispatch(getAllOrders());
+    const orderPromise = dispatch(getAllOrders()).unwrap();
+
+    toast.promise(
+      orderPromise,
+      {
+        pending: 'Fetching... orders',
+        success: 'Fetching orders successfully!',
+        error: `Fetching orders failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   }, [dispatch]);
 
   const columns = [
@@ -96,11 +136,15 @@ function Orders() {
   
 
   return (
-    <section className="mt-4">
+    <section className="mt-4 relative">
       <h1 className="text-3xl font-bold my-4">Orders</h1>
-      {isLoading && <Loader />}
       {isError && <p>Error: {message}</p>}
-      {isSuccess && <Table columns={columns} dataSource={dataSource} />}
+      <Table columns={columns} dataSource={dataSource} />
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-full min-h-screen h-full flex justify-center items-center bg-gray-200 bg-opacity-50">
+          <Loader />
+        </div>
+      )}
     </section>
   );
 }

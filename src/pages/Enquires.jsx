@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Modal, Input, Select, Space } from "antd";
-import Loader from "../components/Loader";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { deleteEnquires, getAllEnquires, updateEnquires } from "../features/enquires/enquiresSlice";
+import { toast ,Bounce} from 'react-toastify';
+import Loader from "../components/Loader";
 
 function Enquires() {
   const dispatch = useDispatch();
@@ -15,12 +16,77 @@ function Enquires() {
   console.log({ enquires, isLoading, isError, isSuccess, message });
 
   const handleChange = (value, id) => {
-    dispatch(updateEnquires({ enquiry: value, enquiryId: id }));
+    const updateEnqStatus =  dispatch(updateEnquires({ enquiry: value, enquiryId: id })).unwrap();
+
+    toast.promise(
+      updateEnqStatus,
+      {
+        pending: 'Updating...',
+        success: 'Status updated successfully!',
+        error: `Status Update failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   };
 
   useEffect(() => {
-    dispatch(getAllEnquires());
+    const enquiryPromise =  dispatch(getAllEnquires()).unwrap();
+
+    toast.promise(
+      enquiryPromise,
+      {
+        pending: 'Fetching... enquries',
+        success: 'Fetching enquries successfully!',
+        error: `Fetching enquries failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   }, [dispatch]);
+
+
+  const handleDelete = (id)=>{
+    const deletePromise =  dispatch(deleteEnquires(id)).unwrap()
+    toast.promise(
+      deletePromise,
+      {
+        pending: 'Deleting...',
+        success: 'Deleted successfully!',
+        error: `Deletion failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
+  }
+
 
   const columns = [
     {
@@ -93,7 +159,7 @@ function Enquires() {
           <MdDelete
             size={22}
             color="crimson"
-            onClick={() => dispatch(deleteEnquires(enq._id))}
+            onClick={()=>handleDelete(enq._id)}
           />
         </Link>
       </div>
@@ -101,11 +167,15 @@ function Enquires() {
   }));
 
   return (
-    <section className="mt-4">
+    <section className="mt-4 relative">
       <h1 className="text-3xl font-bold my-4">Enquires</h1>
-      {isLoading && <Loader />}
       {isError && <p>Error: {message}</p>}
-      {isSuccess && <Table columns={columns} dataSource={dataSource} />}
+      <Table columns={columns} dataSource={dataSource} />
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-full min-h-screen h-full flex justify-center items-center bg-gray-200 bg-opacity-50">
+          <Loader />
+        </div>
+      )}
     </section>
   );
 }

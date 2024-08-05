@@ -13,9 +13,7 @@ const deleteProduct = async (id)=>{
 }
 
 const createProduct = async(product)=>{
-  console.log(product)
   const response = await axios.post(`${products_base_url}/` ,{...product}, config)
-  console.log(response.data)
   return response.data
 }
 

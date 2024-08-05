@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Modal, Input } from "antd";
-import Loader from "../components/Loader";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { deleteColor, getAllColors, updateColor } from "../features/color/colorSlice";
+import { toast, Bounce } from "react-toastify";
+import Loader from "../components/Loader";
 
 function Colors() {
   const dispatch = useDispatch();
@@ -25,8 +26,27 @@ function Colors() {
   };
 
   const handleUpdateColor = () => {
-    dispatch(updateColor({ updatedColor , updateId }))
+    const updatePromise= dispatch(updateColor({ updatedColor , updateId })).unwrap()
     setIsModalOpen(false);
+    toast.promise(
+      updatePromise,
+      {
+        pending: 'Updating...',
+        success: 'Updated successfully!',
+        error: `Update failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   };
 
   const handleCancel = () => {
@@ -34,7 +54,26 @@ function Colors() {
   };
 
   useEffect(() => {
-    dispatch(getAllColors());
+    const uploadPromise = dispatch(getAllColors()).unwrap();
+    toast.promise(
+      uploadPromise,
+      {
+        pending: "Fetching colors...",
+        // success: "Fetched success!",
+        error: `Fetching failed!`,
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   }, [dispatch]);
 
   const columns = [
@@ -79,11 +118,10 @@ function Colors() {
   
 
   return (
-    <section className="mt-4">
+    <section className="mt-4 relative">
       <h1 className="text-3xl font-bold my-4">Colors List</h1>
-      {isLoading && <Loader />}
       {isError && <p>Error: {message}</p>}
-      {isSuccess && <Table dataSource={dataSource} columns={columns} />}
+      <Table dataSource={dataSource} columns={columns} />
       <Modal
         title="Update Color"
         open={isModalOpen}
@@ -98,6 +136,11 @@ function Colors() {
           <div className="text-gray-600 text-xl font-semibold">{updatedColor}</div>
         </div>
       </Modal>
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-full flex justify-center items-center bg-gray-200 bg-opacity-50 min-h-screen h-full">
+          <Loader />
+        </div>
+      )}
     </section>
   );
 }

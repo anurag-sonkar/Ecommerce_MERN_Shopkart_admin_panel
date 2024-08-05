@@ -58,14 +58,14 @@ const brandsSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.brands = action.payload.response;
-        state.message = action.payload.message;
+        // state.message = action.payload.message;
       })
       .addCase(getAllBrands.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.brands = [];
         state.message = action.payload.message;
+        state.brands = [];
       })
       .addCase(createBrand.pending, (state) => {
         state.isLoading = true;

@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Modal, Input } from "antd";
-import Loader from "../components/Loader";
 import { deleteBrand, getAllBrands, updateBrand } from "../features/brands/brandsSlice";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { toast, Bounce } from "react-toastify";
+import Loader from "../components/Loader";
 
 function Brands() {
   const dispatch = useDispatch();
   const { brands, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.brands
   );
-  console.log({ brands, isLoading, isError, isSuccess, message })
+  // console.log({ brands, isLoading, isError, isSuccess, message })
 
   const [updatedBrand, setUpdatedBrand] = useState("");
   const [updateId, setUpdateId] = useState("");
@@ -25,8 +26,28 @@ function Brands() {
   };
 
   const handleUpdateBrand = () => {
-    dispatch(updateBrand({ updatedBrand , updateId }))
+    const updatePromise =  dispatch(updateBrand({ updatedBrand , updateId })).unwrap()
     setIsModalOpen(false);
+
+    toast.promise(
+      updatePromise,
+      {
+        pending: 'Updating...',
+        success: 'Updated successfully!',
+        error: `Update failed!`
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
   };
 
   const handleCancel = () => {
@@ -34,7 +55,28 @@ function Brands() {
   };
 
   useEffect(() => {
-    dispatch(getAllBrands());
+    const uploadPromise = dispatch(getAllBrands()).unwrap()
+    toast.promise(
+      uploadPromise,
+      {
+        pending: "Fetching brands...",
+        // success: "Fetched success!",
+        error: `Fetching failed!`,
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
+
+    
   }, [dispatch]);
 
   const columns = [
@@ -79,11 +121,10 @@ function Brands() {
   
 
   return (
-    <section className="mt-4">
+    <section className="mt-4 relative">
       <h1 className="text-3xl font-bold my-4">Brands List</h1>
-      {isLoading && <Loader />}
       {isError && <p>Error: {message}</p>}
-      {isSuccess && <Table dataSource={dataSource} columns={columns} />}
+      <Table dataSource={dataSource} columns={columns} />
       <Modal
         title="Update Brand Name"
         open={isModalOpen}
@@ -96,6 +137,11 @@ function Brands() {
           onChange={(e) => setUpdatedBrand(e.target.value)}
         />
       </Modal>
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-full flex justify-center items-center bg-gray-200 bg-opacity-50 min-h-screen h-full">
+          <Loader />
+        </div>
+      )}
     </section>
   );
 }

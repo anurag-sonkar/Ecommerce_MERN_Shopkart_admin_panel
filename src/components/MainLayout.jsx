@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -22,6 +22,9 @@ import { BiLogoBlogger } from "react-icons/bi";
 
 import logo from "../assets/logo.svg";
 import { Outlet, Link } from "react-router-dom";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   Menu as TailwindMenu,
@@ -92,12 +95,12 @@ function MainLayout() {
                 {
                   key: "add-product",
                   icon: <FaProductHunt />,
-                  label: <Link to='/admin/add-product'>Add Product</Link>,
+                  label: <Link to="/admin/add-product">Add Product</Link>,
                 },
                 {
                   key: "product-list",
                   icon: <CiCircleList />,
-                  label: <Link to='/admin/products'>Products List</Link>,
+                  label: <Link to="/admin/products">Products List</Link>,
                 },
                 {
                   key: "brand",
@@ -107,17 +110,25 @@ function MainLayout() {
                 {
                   key: "brand-list",
                   icon: <CiCircleList />,
-                  label: <Link to='/admin/brands'>Brand List</Link>,
+                  label: <Link to="/admin/brands">Brand List</Link>,
                 },
                 {
                   key: "add-product-category",
                   icon: <MdOutlineCategory />,
-                  label: <Link to='/admin/add-product-category'>Add Product Category</Link>
+                  label: (
+                    <Link to="/admin/add-product-category">
+                      Add Product Category
+                    </Link>
+                  ),
                 },
                 {
                   key: "products-category-list",
                   icon: <CiCircleList />,
-                  label:  <Link to='/admin/products-category-list'>Product Categories List</Link>
+                  label: (
+                    <Link to="/admin/products-category-list">
+                      Product Categories List
+                    </Link>
+                  ),
                 },
                 {
                   key: "color",
@@ -154,12 +165,16 @@ function MainLayout() {
                 {
                   key: "add-blog-category",
                   icon: <MdOutlineCategory />,
-                  label:<Link to="/admin/add-blog-category">Add Blog Category</Link>
+                  label: (
+                    <Link to="/admin/add-blog-category">Add Blog Category</Link>
+                  ),
                 },
                 {
                   key: "blogs-category-list",
                   icon: <CiCircleList />,
-                  label: <Link to="/admin/blogs-category-list">Blog Category</Link>
+                  label: (
+                    <Link to="/admin/blogs-category-list">Blog Category</Link>
+                  ),
                 },
               ],
             },
@@ -234,6 +249,19 @@ function MainLayout() {
             borderRadius: borderRadiusLG,
           }}
         >
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            transition:Bounce
+          />
           <Outlet /> {/* Content */}
         </Content>
       </Layout>
