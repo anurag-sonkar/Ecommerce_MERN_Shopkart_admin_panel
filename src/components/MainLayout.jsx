@@ -19,6 +19,8 @@ import { IoIosColorPalette } from "react-icons/io";
 import { AiOutlineDropbox } from "react-icons/ai";
 import { RiBloggerLine } from "react-icons/ri";
 import { BiLogoBlogger } from "react-icons/bi";
+import { RiCoupon3Line } from "react-icons/ri";
+import { SiGooglemarketingplatform } from "react-icons/si";
 
 import logo from "../assets/logo.svg";
 import { Outlet, Link } from "react-router-dom";
@@ -146,6 +148,25 @@ function MainLayout() {
               key: "orders",
               icon: <AiOutlineDropbox />,
               label: <Link to="/admin/orders">Orders</Link>,
+            },
+            {
+              key: "marketing",
+              icon: <SiGooglemarketingplatform />,
+
+              label: "Marketing",
+              children: [
+                {
+                  key: "add-coupon",
+                  icon: <RiCoupon3Line />,
+                  label: <Link to="/admin/add-coupon">Add coupon</Link>,
+                },
+                {
+                  key: "coupon-list",
+                  icon: <CiCircleList />,
+                  label: <Link to="/admin/coupons-list">Coupons List</Link>,
+                },
+                
+              ],
             },
             {
               key: "blogs",

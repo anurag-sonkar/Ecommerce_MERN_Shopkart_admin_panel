@@ -109,7 +109,7 @@ function Colors() {
           <MdDelete
             size={22}
             color="crimson"
-            onClick={() => dispatch(deleteColor(color._id))}
+            onClick={() =>deleteColor(color._id)}
           />
         </Link>
       </div>
