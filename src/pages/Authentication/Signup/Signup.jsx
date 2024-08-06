@@ -2,42 +2,124 @@ import { useEffect, useState } from "react";
 import styles from "./Signup.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers } from "../../../features/customers/customersSlice";
+import { register } from "../../../features/auth/authSlice";
+import { toast, Bounce } from "react-toastify";
+// import Loader from "../components/Loader";
 
-function SignupForm() {
+/* check screen size for animation */
+const useScreenSize = () => {
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return isLargeScreen;
+};
+
+function SignupForm({ setSignIn }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(null);
   const [error, setError] = useState("");
+  const isLargeScreen = useScreenSize(); // custom hook
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { customers, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.customers
-  );
+  const { user, registerState, isLoading, isError, isSuccess, message } =
+    useSelector((state) => state.auth);
 
-  // console.log({customers, isLoading, isError, isSuccess, message})
+  // console.log({user,registerState, isLoading, isError, isSuccess, message})
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
   const handleSignup = () => {
-    // if (!name || !email || !password || !image) {
-    if (!name || !email || !password) {
-      setError("Please fill in all fields and upload an image");
+    if (!name || !email || !password || !confirmPassword) {
+      setError("Please fill in all fields ");
+      return;
     } else {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("cpassword", confirmPassword);
+      formData.append("admin", true);
 
-      setError("");
+      if (image) {
+        formData.append("photo", image);
+      }
+      const registerPromise = dispatch(register(formData)).unwrap();
+
+      toast.promise(
+        registerPromise,
+        {
+          pending: "Creating Account...",
+          success: "Registered Successfully!",
+          error: `Registration failed!`,
+        },
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        }
+      );
+
+      registerPromise.then(() => {
+        if (isLargeScreen) {
+          setSignIn(true);
+        } else {
+          navigate("/login");
+        }
+        toast.success(
+          `${(registerState && registerState.name) || "You can"} login now`,
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+          }
+        );
+      });
     }
   };
 
-  useEffect(
-    ()=>{
-      // dispatch(getAllUsers())
-    }
-    ,[]
-  )
-
+  console.log(image)
   return (
     <form className={styles.form}>
-      <h1 className={styles.title}>Create Account</h1>
+    {
+      image == null ? <h1 className={styles.title}>Sign up</h1> : <div className={styles.profile}>
+        <img src={image} />
+      </div>
+    }
+      
       <input
         type="text"
         className={styles.input}
@@ -60,18 +142,27 @@ function SignupForm() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <input
+        type="password"
+        className={styles.input}
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+      />
+      <input
         type="file"
         className={styles.input}
-        onChange={(e) => setImage(e.target.files[0])}
+        onChange={handleImageChange}
       />
       {error && <div className={styles.errorMessage}>{error}</div>}
       <button type="button" className={styles.button} onClick={handleSignup}>
         Sign Up
       </button>
       <div className="my-4 lg:hidden block">
-      <Link to='/login'>Already have an account? <span className="text-blue-800 font-semibold">Login</span></Link>
+        <Link to="/login">
+          Already have an account?{" "}
+          <span className="text-blue-800 font-semibold">Login</span>
+        </Link>
       </div>
-
     </form>
   );
 }

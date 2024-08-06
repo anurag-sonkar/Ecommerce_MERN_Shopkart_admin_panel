@@ -7,14 +7,18 @@ import {
 } from "../features/products/productSlice";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { BsEyeFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { toast, Bounce } from "react-toastify";
 import Loader from "../components/Loader";
+
+
 function Products() {
   const dispatch = useDispatch();
   const { products, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.products
   );
+  console.log(products)
   /* modal */
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -44,7 +48,7 @@ function Products() {
 
 
   useEffect(() => {
-    const fetchPromise =dispatch(getAllProducts()).unwrap();
+    const fetchPromise = dispatch(getAllProducts()).unwrap();
     toast.promise(
       fetchPromise,
       {
@@ -116,11 +120,11 @@ function Products() {
       key: "category",
       sorter: (a, b) => a.category.localeCompare(b.category),
     },
-    // {
-    //   title: "Color",
-    //   dataIndex: "color",
-    //   key: "color",
-    // },
+    {
+      title: "Color",
+      dataIndex: "color",
+      key: "color",
+    },
     {
       title: "Price",
       dataIndex: "price",
@@ -140,10 +144,13 @@ function Products() {
     title: product.title,
     brand: product.brand,
     category: product.category,
-    // color: "",
+    color: product.color.map((ele)=><div key={ele._id} className="mb-1 py-1 rounded-sm text-center text-white" style={{backgroundColor:`${ele.color}`}}>{ele.color}</div>),
     price: product.price,
     action: (
-      <div className="flex items-center gap-5">
+      <div className="grid place-items-center gap-5">
+      <Link to={`/admin/product/view/${product._id}`} >
+        <BsEyeFill size={20} onClick={() => console.log(product._id)}  />
+      </Link>
         <Link>
           <FaEdit size={20} onClick={() => console.log(product._id)} />
         </Link>
@@ -165,9 +172,9 @@ function Products() {
       {isError && <p>Error: {message}</p>}
       <Table columns={columns} dataSource={dataSource} />
       <>
-        <Button type="primary" onClick={showModal}>
+        {/* <Button type="primary" onClick={showModal}>
           Open Modal with async logic
-        </Button>
+        </Button> */}
         <Modal
           title="Update Product"
           open={open}

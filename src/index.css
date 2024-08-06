@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.body{
+.body {
   font-family: Roboto, sans-serif;
 }
 
@@ -83,11 +83,11 @@
   font-style: italic;
 }
 
-.ant-layout{
+.ant-layout {
   min-height: 100vh;
 }
 
-.logo{
+.logo {
   color: white;
   font-size: 1.5rem;
   padding: 0.5rem;
@@ -95,23 +95,26 @@
   background-color: #334454;
 }
 
-.sm-logo{
-display: none;
-transition: 0.3s;
+.sm-logo {
+  display: none;
+  transition: 0.3s;
 }
 
-.ant-layout-sider-collapsed .sm-logo{
+.ant-layout-sider-collapsed .sm-logo {
   display: block;
 }
 
-.ant-layout-sider-collapsed .lg-logo{
+.ant-layout-sider-collapsed .lg-logo {
   display: none;
-
 }
 
-.lg-logo{
-
+.lg-logo {
 }
 
-.ant-menu{
+.ant-menu {
 }
+
+
+
+
+

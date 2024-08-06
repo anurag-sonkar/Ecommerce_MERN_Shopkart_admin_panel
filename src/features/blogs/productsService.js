@@ -17,17 +17,10 @@ const createProduct = async(product)=>{
   return response.data
 }
 
-const getProduct = async(id)=>{
-  console.log(id)
-  const response = await axios.get(`${products_base_url}/${id}` ,config)
-  console.log(response.data)
-  return response.data
-}
 const productsService = {
   getAllProducts,
   deleteProduct,
-  createProduct,
-  getProduct
+  createProduct
 };
 
 export default productsService;

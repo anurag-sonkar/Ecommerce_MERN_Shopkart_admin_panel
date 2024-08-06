@@ -10,7 +10,7 @@ function AuthenticationForm() {
     <div className={styles.authContainer}>
       <div className={`${styles.container} ${signIn ? "" : styles.rightPanelActive}`}>
         <div className={`${styles.formContainer} ${styles.signUpContainer}`}>
-          <SignupForm />
+          <SignupForm signIn={signIn} setSignIn={setSignIn}/>
         </div>
         <div className={`${styles.formContainer} ${styles.signInContainer}`}>
           <LoginForm />

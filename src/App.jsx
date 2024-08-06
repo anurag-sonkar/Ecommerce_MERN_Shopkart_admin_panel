@@ -1,5 +1,5 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import AuthenticationForm from './pages/Authentication/Auth/Auth'
 
 import ResetPassword from './pages/Authentication/ResetPassword'
@@ -25,10 +25,43 @@ import Colors from './pages/Colors'
 import Orders from './pages/Orders'
 import AddCoupon from './pages/AddCoupon'
 import Coupons from './pages/Coupons'
-
+import ViewProduct from './pages/ViewProduct'
+import { useDispatch, useSelector } from 'react-redux'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { toast, Bounce } from "react-toastify";
 
 function App() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    console.log( user, isLoading, isError, isSuccess, message )
+    if (user) {
+      navigate("/admin");
+    } else {
+      navigate("/");
+    }
+  }, [dispatch,user]);
   return (
+    <>
+      <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            transition:Bounce
+          />
     <Routes>
       <Route path='/' element={<AuthenticationForm />} />
       <Route path='/signup' element={<SignupForm />} />
@@ -46,8 +79,9 @@ function App() {
         <Route path='add-brand' element={<AddBrand/>} />
         <Route path='add-color' element={<AddColor/>} />
         <Route path='add-product' element={<AddProduct/>} />
-        <Route path='customers' element={<Customers/>} />
         <Route path='products' element={<Products/>} />
+        <Route path='/admin/product/view/:id' element={<ViewProduct/>} />
+        <Route path='customers' element={<Customers/>} />
         <Route path='brands' element={<Brands/>} />
         <Route path='products-category-list' element={<ProductsCategory/>} />
         <Route path='blogs-category-list' element={<BlogsCategory/>} />
@@ -60,6 +94,7 @@ function App() {
       </Route>
       <Route path='*' element={<Error/>} />
     </Routes>
+    </>
   )
 }
 

@@ -4,7 +4,6 @@ import { config } from "../../utils/config";
 
 const getAllUsers = async () => {
     const response = await axios.get(`${customers_base_url}/allusers`, config);
-    console.log("run")
 
     console.log(response.data.users)
     

@@ -9,10 +9,10 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+  // const navigate = useNavigate();
+  // const { user, isLoading, isError, isSuccess, message } = useSelector(
+  //   (state) => state.auth
+  // );
 
   const handleLogin = () => {
     if (!email || !password) {
@@ -23,14 +23,14 @@ function LoginForm() {
     }
   };
 
-  useEffect(() => {
-    console.log( user, isLoading, isError, isSuccess, message )
-    if (user || isSuccess) {
-      navigate("admin");
-    } else {
-      navigate("/");
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   console.log( user, isLoading, isError, isSuccess, message )
+  //   if (user) {
+  //     navigate("/admin");
+  //   } else {
+  //     navigate("/");
+  //   }
+  // }, [dispatch,user]);
 
   return (
     <form className={styles.form}>
@@ -49,7 +49,6 @@ function LoginForm() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      {message && <div className={styles.errorMessage}>{message}</div>}  {/*backend error */}
       {error && <div className={styles.errorMessage}>{error}</div>}  {/*front-end error */}
       <Link to="/forgot-password" className={styles.anchor}>
         Forgot your password?

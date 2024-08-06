@@ -5,6 +5,7 @@ const getUserFromLocalStorage = localStorage.getItem('user') ? JSON.parse(localS
 
 const initialState = {
 user : getUserFromLocalStorage,
+registerState : {},
 isLoading:false,
 isError : false,
 isSuccess : false,
@@ -15,6 +16,25 @@ export const login = createAsyncThunk('auth/login' , async(user,thunkAPI) =>{
     try {
         // console.log(user)
         return await authService.login(user)
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error)
+        
+    }
+})
+export const register = createAsyncThunk('auth/register' , async(data,thunkAPI) =>{
+    try {
+        
+        return await authService.register(data)
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error)
+        
+    }
+})
+
+
+export const signOut = createAsyncThunk('auth/signOut' , async(_,thunkAPI) =>{
+    try {
+        return await authService.signOut()
     } catch (error) {
         return thunkAPI.rejectWithValue(error)
         
@@ -35,7 +55,7 @@ const authSlice = createSlice({
     .addCase(login.fulfilled,(state,action)=>{
         state.isLoading = false
         state.isSuccess = true
-        state.user = action.payload
+        state.user = action.payload.user
     })
     .addCase(login.rejected,(state,action)=>{
         state.isLoading = false
@@ -43,6 +63,38 @@ const authSlice = createSlice({
         state.isSuccess = false
         state.user = null
         state.message = action.payload.response.data.error
+    })
+    .addCase(register.pending,(state)=>{
+        state.isLoading = true
+    })
+    .addCase(register.fulfilled,(state,action)=>{
+        state.isLoading = false
+        state.isSuccess = true
+        state.registerState = action.payload
+        // state.message = ''
+    })
+    .addCase(register.rejected,(state,action)=>{
+        state.isLoading = false
+        state.isError = true
+        state.isSuccess = false
+        state.user = null
+        state.message = action.payload.response.data.error
+    })
+    .addCase(signOut.pending,(state)=>{
+        state.isLoading = true
+    })
+    .addCase(signOut.fulfilled,(state,action)=>{
+        state.isLoading = false
+        state.isSuccess = true
+        state.user = null
+        
+    })
+    .addCase(signOut.rejected,(state,action)=>{
+        state.isLoading = false
+        state.isError = true
+        state.isSuccess = false
+        state.user = null
+        state.message = action.payload.message
     })
   }
 })

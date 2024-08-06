@@ -34,10 +34,42 @@ import {
   MenuItems as TailwindMenuItems,
   MenuItem as TailwindMenuItem,
 } from "@headlessui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { signOut } from "../features/auth/authSlice";
+import { toast, Bounce } from "react-toastify";
+import Loader from "../components/Loader";
 
 function MainLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKey, setSelectedKey] = useState("dashboard");
+  const dispatch = useDispatch();
+  const {isLoading} = useSelector(state=>state.auth)
+  
+  const handleSignOut =  ()=>{
+    dispatch(signOut())
+    // toast.promise(
+    //   signOutPromise,
+    //   {
+    //     pending: "Sigining out...",
+    //     success: "Sigining out successfully!",
+    //     error: `Signout failed!`,
+    //   },
+    //   {
+    //     position: "top-right",
+    //     autoClose: 1500,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "dark",
+    //     transition: Bounce,
+    //   }
+    // );
+
+    
+  }
+
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -165,7 +197,6 @@ function MainLayout() {
                   icon: <CiCircleList />,
                   label: <Link to="/admin/coupons-list">Coupons List</Link>,
                 },
-                
               ],
             },
             {
@@ -204,6 +235,12 @@ function MainLayout() {
               icon: <CiCircleList />,
               label: <Link to="/admin/enquires">Enquires</Link>,
             },
+            // {
+            //   key: "demo",
+            //   icon: <RiCustomerService2Line />,
+            //   label: <Link to="/admin/product/view/:id">View</Link>,
+            //   // style: {display : 'none'}
+            // },
           ]}
         />
       </Sider>
@@ -251,12 +288,12 @@ function MainLayout() {
                   </Link>
                 </TailwindMenuItem>
                 <TailwindMenuItem>
-                  <Link
-                    to="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full text-left block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                   >
                     Sign out
-                  </Link>
+                  </button>
                 </TailwindMenuItem>
               </TailwindMenuItems>
             </TailwindMenu>
@@ -283,7 +320,12 @@ function MainLayout() {
             theme="dark"
             transition:Bounce
           />
-          <Outlet /> {/* Content */}
+          <div className="relative"><Outlet /> /*content */ </div>
+          {isLoading && (
+        <div className="absolute top-0 left-0 w-full flex justify-center items-center bg-gray-200 bg-opacity-50 min-h-screen h-full">
+          <Loader />
+        </div>
+      )}
         </Content>
       </Layout>
     </Layout>
