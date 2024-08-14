@@ -43,29 +43,31 @@ function MainLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKey, setSelectedKey] = useState("dashboard");
   const dispatch = useDispatch();
-  const {isLoading} = useSelector(state=>state.auth)
-  
-  const handleSignOut =  ()=>{
+  const {user,isLoading} = useSelector(state=>state.auth)
+  const [profile , setProfile] = useState( user?.imgpath?.url || '../src/assets/profile.png')
+
+  const handleSignOut =  (e)=>{
+    e.preventDefault();
     dispatch(signOut())
-    // toast.promise(
-    //   signOutPromise,
-    //   {
-    //     pending: "Sigining out...",
-    //     success: "Sigining out successfully!",
-    //     error: `Signout failed!`,
-    //   },
-    //   {
-    //     position: "top-right",
-    //     autoClose: 1500,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //     theme: "dark",
-    //     transition: Bounce,
-    //   }
-    // );
+    toast.promise(
+      signOutPromise,
+      {
+        pending: "Sigining out...",
+        success: "Sigining out successfully!",
+        error: `Signout failed!`,
+      },
+      {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
 
     
   }
@@ -75,17 +77,17 @@ function MainLayout() {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  useEffect(() => {
-    const storedSelectedKey = localStorage.getItem("selectedKey");
-    const storedCollapsedState = localStorage.getItem("collapsed");
+  // useEffect(() => {
+  //   const storedSelectedKey = localStorage.getItem("selectedKey");
+  //   const storedCollapsedState = localStorage.getItem("collapsed");
 
-    if (storedSelectedKey) {
-      setSelectedKey(storedSelectedKey);
-    }
-    if (storedCollapsedState) {
-      setCollapsed(storedCollapsedState === "true");
-    }
-  }, []);
+  //   if (storedSelectedKey) {
+  //     setSelectedKey(storedSelectedKey);
+  //   }
+  //   if (storedCollapsedState) {
+  //     setCollapsed(storedCollapsedState === "true");
+  //   }
+  // }, []);
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
@@ -270,7 +272,7 @@ function MainLayout() {
                   <span className="sr-only">Open user menu</span>
                   <img
                     alt=""
-                    src="../src/assets/photo.png"
+                    src={profile}
                     className="h-12 w-12 rounded-full object-cover"
                   />
                 </TailwindMenuButton>
@@ -281,10 +283,10 @@ function MainLayout() {
               >
                 <TailwindMenuItem>
                   <Link
-                    to="/profile"
+                    to="/admin/profile"
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                   >
-                    Your Profile
+                    My MyAccount
                   </Link>
                 </TailwindMenuItem>
                 <TailwindMenuItem>
@@ -320,7 +322,7 @@ function MainLayout() {
             theme="dark"
             transition:Bounce
           />
-          <div className="relative"><Outlet /> /*content */ </div>
+          <div className="relative"><Outlet /> {/*content */} </div>
           {isLoading && (
         <div className="absolute top-0 left-0 w-full flex justify-center items-center bg-gray-200 bg-opacity-50 min-h-screen h-full">
           <Loader />

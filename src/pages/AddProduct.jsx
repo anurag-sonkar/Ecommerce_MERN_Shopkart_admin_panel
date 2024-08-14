@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import JoditEditor from "jodit-react";
 import { Button, Input, Select } from "@material-tailwind/react";
-import { Select as ANTDSelect } from "antd";
+import { Select as ANTDSelect ,Space} from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBrands } from "../features/brands/brandsSlice";
 import { getAllProductsCategory } from "../features/productCategory/productCategorySlice";
@@ -30,6 +30,7 @@ function AddProduct({ placeholder }) {
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [color, setColor] = useState([]);
+  const [tags, setTags] = useState([]);
 
   // console.log(title, description, price, quantity, brand, category, color);
   
@@ -66,8 +67,15 @@ function AddProduct({ placeholder }) {
     [placeholder]
   );
 
+
+  // color
   const handleChange = (value) => {
     setColor([...value]);
+  };
+
+  // tags
+  const handleTagsChange = (value) => {
+    setTags([...value])
   };
 
   const handleAddProduct = () => {
@@ -80,6 +88,7 @@ function AddProduct({ placeholder }) {
         brand,
         category,
         color,
+        tags,
         images
       })
     ).unwrap();
@@ -139,6 +148,8 @@ function AddProduct({ placeholder }) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+
+  // color option
   const colorOptions = colors.map((color) => ({
     label: color.color,
     value: color._id,
@@ -158,6 +169,23 @@ function AddProduct({ placeholder }) {
     ),
   }));
 
+
+  // tags option
+  const options = [
+    {
+      label: 'popular',
+      value: 'popular',
+    },
+    {
+      label: 'featured',
+      value: 'featured',
+    },
+    {
+      label: 'special',
+      value: 'special',
+    },
+    
+  ];
   return (
     <div className="relative">
       <h1 className="text-4xl font-semibold">Add Product</h1>
@@ -188,6 +216,8 @@ function AddProduct({ placeholder }) {
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
           />
+
+          {/* brand */}
           <div className="w-full">
             <Select
               label="Select Brand"
@@ -202,6 +232,8 @@ function AddProduct({ placeholder }) {
                 ))}
             </Select>
           </div>
+
+          {/* category */}
           <div className="w-full">
             <Select
               label="Select Category"
@@ -216,6 +248,9 @@ function AddProduct({ placeholder }) {
                 ))}
             </Select>
           </div>
+
+
+          {/*color */}
           <div className="w-full">
             <ANTDSelect
               mode="multiple"
@@ -232,6 +267,33 @@ function AddProduct({ placeholder }) {
               }))}
             />
           </div>
+
+
+              {/* tags */}
+              <div className="w-full">
+              <ANTDSelect
+    mode="multiple"
+    style={{
+                width: "100%",
+                height: "2.6rem",
+                backgroundColor: "#F5F5F5",
+              }}
+    placeholder="Select Tags"
+    // defaultValue={['china']}
+    onChange={handleTagsChange}
+    options={options}
+    // optionRender={(option) => (
+    //   <Space>
+    //     <span role="img" aria-label={option.data.label}>
+    //       {option.data.emoji}
+    //     </span>
+    //     {option.data.desc}
+    //   </Space>
+    // )}
+  />
+              </div>
+
+
           {/* upload */}
           <div className="w-full border-2 border-gray-400 text-gray-600 border-dashed min-h-32 flex justify-center items-center cursor-pointer text-2xl">
             <div {...getRootProps()}>

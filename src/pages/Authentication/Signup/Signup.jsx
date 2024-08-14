@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import styles from "./Signup.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +32,7 @@ function SignupForm({ setSignIn }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(null);
   const [error, setError] = useState("");
+  const [imagePreview , setImagePreview] = useState("")
   const isLargeScreen = useScreenSize(); // custom hook
 
   const dispatch = useDispatch();
@@ -44,13 +45,15 @@ function SignupForm({ setSignIn }) {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImage(reader.result);
+      setImagePreview(reader.result);
+      setImage(file)
     };
     if (file) {
       reader.readAsDataURL(file);
     }
   };
-  const handleSignup = () => {
+  const handleSignup = (e) => {
+    e.preventDefault();
     if (!name || !email || !password || !confirmPassword) {
       setError("Please fill in all fields ");
       return;
@@ -65,6 +68,7 @@ function SignupForm({ setSignIn }) {
       if (image) {
         formData.append("photo", image);
       }
+      
       const registerPromise = dispatch(register(formData)).unwrap();
 
       toast.promise(
@@ -107,16 +111,15 @@ function SignupForm({ setSignIn }) {
             transition: Bounce,
           }
         );
-      });
+      })
     }
   };
 
-  console.log(image)
   return (
     <form className={styles.form}>
     {
       image == null ? <h1 className={styles.title}>Sign up</h1> : <div className={styles.profile}>
-        <img src={image} />
+        <img src={imagePreview} />
       </div>
     }
       

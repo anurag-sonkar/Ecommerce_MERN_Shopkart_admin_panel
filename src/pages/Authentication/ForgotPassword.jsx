@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import HelmetTitle from "../../components/HelmetTitle";
+import { useDispatch } from "react-redux";
+import { forgotPassword } from "../../features/auth/authSlice";
 function ForgotPassword() {
+
+  const [email , setEmail] = useState("")
+  const dispatch = useDispatch()
+
+  const handleForgotPassword = ()=>{
+    if(!email) alert('email is required to reset password')
+    dispatch(forgotPassword({email}))
+  }
+
   return (
     <main className="grid min-h-full place-items-center bg-gray-200 px-6 py-16 sm:py-32 lg:px-8">
     <HelmetTitle title="Reset Password" />
@@ -18,17 +29,17 @@ function ForgotPassword() {
         </div>
         {/* foam */}
         <div className="flex-col grid place-items-center w-full mt-3">
-          <Input size="md" label="Enter Your Email" />
+          <Input size="md" label="Enter Your Email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
         </div>
         {/* error */}
         {/* <p className="text-left text-xs text-red-800 px-1">eoor</p> */}
         <div className="mt-10 flex items-center justify-center gap-x-6">
-          <Link
-            to="/auth"
+          <button
+            onClick={handleForgotPassword}
             className="rounded-full bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Submit
-          </Link>
+          </button>
           <Link to="/contact" className="text-sm font-semibold text-gray-900">
             Contact support <span aria-hidden="true">&rarr;</span>
           </Link>

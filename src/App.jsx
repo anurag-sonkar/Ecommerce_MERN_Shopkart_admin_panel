@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import AuthenticationForm from './pages/Authentication/Auth/Auth'
 
 import ResetPassword from './pages/Authentication/ResetPassword'
@@ -30,26 +30,28 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, Bounce } from "react-toastify";
+import Profile from './pages/MyAccount'
+import MyAccount from './pages/MyAccount'
 
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const {pathname} = useLocation()
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.auth
   );
 
   useEffect(() => {
-    console.log( user, isLoading, isError, isSuccess, message )
+    // console.log( user, isLoading, isError, isSuccess, message )
     if (user) {
-      navigate("/admin");
+      navigate(pathname);
     } else {
       navigate("/");
     }
   }, [dispatch,user]);
   return (
     <>
-      <ToastContainer
+      {/* <ToastContainer
             position="top-right"
             autoClose={5000}
             hideProgressBar={false}
@@ -61,7 +63,7 @@ function App() {
             pauseOnHover
             theme="dark"
             transition:Bounce
-          />
+          /> */}
     <Routes>
       <Route path='/' element={<AuthenticationForm />} />
       <Route path='/signup' element={<SignupForm />} />
@@ -81,6 +83,7 @@ function App() {
         <Route path='add-product' element={<AddProduct/>} />
         <Route path='products' element={<Products/>} />
         <Route path='/admin/product/view/:id' element={<ViewProduct/>} />
+        <Route path='/admin/profile' element={<MyAccount/>} />
         <Route path='customers' element={<Customers/>} />
         <Route path='brands' element={<Brands/>} />
         <Route path='products-category-list' element={<ProductsCategory/>} />

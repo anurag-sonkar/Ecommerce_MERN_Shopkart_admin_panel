@@ -1,36 +1,44 @@
-import { useEffect, useState } from "react";
+import React,{ useState } from "react";
 import styles from "./Login.module.css";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { login } from "../../../features/auth/authSlice";
+import { toast, Bounce } from "react-toastify";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  // const { user, isLoading, isError, isSuccess, message } = useSelector(
-  //   (state) => state.auth
-  // );
 
   const handleLogin = () => {
     if (!email || !password) {
       setError("Please fill in all fields");
     } else {
-      dispatch(login({ email, password }));
+      const authPromise =  dispatch(login({ email, password })).unwrap();
+      toast.promise(
+        authPromise,
+        {
+          // pending: "loging...",
+          success: "login Successfully!",
+          error: `login failed!`,
+        },
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        }
+      );
       setError("");
     }
   };
 
-  // useEffect(() => {
-  //   console.log( user, isLoading, isError, isSuccess, message )
-  //   if (user) {
-  //     navigate("/admin");
-  //   } else {
-  //     navigate("/");
-  //   }
-  // }, [dispatch,user]);
 
   return (
     <form className={styles.form}>

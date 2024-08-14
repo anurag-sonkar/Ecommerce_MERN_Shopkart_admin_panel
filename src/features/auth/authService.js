@@ -2,10 +2,16 @@ import axios from "axios";
 import { auth_base_url } from "../../utils/base_url";
 import { config } from "../../utils/config";
 
+// const forgotPassword = async(email)=>{
+//   const response = await axios.post(`${auth_base_url}/auth/forgot-password`, email);
+//     console.log(response)
+// }
+
+
 const login = async (userData) => {
-    console.log(userData)
+    // console.log(userData)
     const response = await axios.post(`${auth_base_url}/auth/admin-login`, userData);
-    // console.log(response)
+    console.log(response)
 
     if(response.data){
         localStorage.setItem('user',JSON.stringify(response.data))
@@ -33,8 +39,6 @@ const signOut = async ()=>{
 }
 
 const register = async (data)=>{
-    
-    console.log(data)
     const response = await axios.post(`${auth_base_url}/auth/register`, data ,{
         headers: {
         'Content-Type': 'multipart/form-data'
@@ -46,11 +50,29 @@ const register = async (data)=>{
 
 }
 
+const forgotPassword = async (data)=>{
+  const response = await axios.post(`${auth_base_url}/auth/forgot-password` , data)
+  console.log(response)
+  return response.data
+}
+
+const resetPassword = async (data)=>{
+  try {
+      const {password ,token} = data
+  const response = await axios.put(`${auth_base_url}/auth/reset-password/${token}` , {password})
+  console.log(response)
+  return response.data
+  } catch (error) {
+      return error.message
+      
+  }
+}
+
 
 
 
 const authService = {
-    login,signOut,register
+    login,signOut,register,forgotPassword,resetPassword
 }
 
 export default authService;
