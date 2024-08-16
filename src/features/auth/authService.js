@@ -68,11 +68,30 @@ const resetPassword = async (data)=>{
   }
 }
 
+const getMonthWiseOrderStats = async () => {
+  // console.log(status,id)
+  const response = await axios.get(
+    `${auth_base_url}/getMonthWiseOrderStats`,
+    config
+  );
+// console.log(response)
+  return response.data;
+};
+
+const getYearWiseOrderStats = async () => {
+  // console.log(status,id)
+  const response = await axios.get(
+    `${auth_base_url}/getYearlyTotalOrders`,
+    config
+  );
+// console.log(response)
+  return response.data;
+};
 
 
 
 const authService = {
-    login,signOut,register,forgotPassword,resetPassword
+    login,signOut,register,forgotPassword,resetPassword,getMonthWiseOrderStats,getYearWiseOrderStats
 }
 
 export default authService;
