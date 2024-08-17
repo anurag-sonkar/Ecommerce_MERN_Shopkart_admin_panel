@@ -4,7 +4,7 @@ import { config } from "../../utils/config";
 
 const getAllOrders = async () => {
   const response = await axios.get(`${orders_base_url}/get-all`, config);
-  console.log("heelo",response.data)
+  // console.log("heelo",response.data)
   return response.data;
 };
 
@@ -20,7 +20,6 @@ const getAllOrders = async () => {
 };
 
 const updateOrders = async (status, id) => {
-  console.log(status,id)
   const response = await axios.put(
     `${orders_base_url}/update-status/${id}`,
     { status: status },

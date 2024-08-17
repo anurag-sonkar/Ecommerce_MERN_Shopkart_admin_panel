@@ -106,7 +106,6 @@ const ordersSlice = createSlice({
         state.isSuccess = true;
         state.orders = action.payload.response; 
         state.message = action.payload.message;
-        console.log("Updated Orders in State:", state.orders); // Add this log
       })      
       .addCase(updateOrders.rejected, (state, action) => {
         state.isLoading = false;

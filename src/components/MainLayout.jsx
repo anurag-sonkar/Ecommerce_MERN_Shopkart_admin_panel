@@ -69,7 +69,6 @@ function MainLayout() {
       }
     );
 
-    
   }
 
 
@@ -77,17 +76,17 @@ function MainLayout() {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  // useEffect(() => {
-  //   const storedSelectedKey = localStorage.getItem("selectedKey");
-  //   const storedCollapsedState = localStorage.getItem("collapsed");
+  useEffect(() => {
+    const storedSelectedKey = localStorage.getItem("selectedKey");
+    const storedCollapsedState = localStorage.getItem("collapsed");
 
-  //   if (storedSelectedKey) {
-  //     setSelectedKey(storedSelectedKey);
-  //   }
-  //   if (storedCollapsedState) {
-  //     setCollapsed(storedCollapsedState === "true");
-  //   }
-  // }, []);
+    if (storedSelectedKey) {
+      setSelectedKey(storedSelectedKey);
+    }
+    if (storedCollapsedState) {
+      setCollapsed(storedCollapsedState === "true");
+    }
+  }, []);
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
