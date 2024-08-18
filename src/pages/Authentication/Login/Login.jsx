@@ -2,7 +2,7 @@ import React,{ useState } from "react";
 import styles from "./Login.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../../../features/auth/authSlice";
+import { getMonthWiseOrderStats, login } from "../../../features/auth/authSlice";
 import { toast, Bounce } from "react-toastify";
 
 function LoginForm() {
@@ -39,7 +39,7 @@ function LoginForm() {
 
       authPromise.then(()=>{
         localStorage.setItem('tour', JSON.stringify(true)); // setting tour as true on login success
-        navigate('/admin');
+        // navigate('/admin');
       })
       setError("");
     }

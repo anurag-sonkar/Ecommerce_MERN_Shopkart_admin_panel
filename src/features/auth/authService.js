@@ -22,16 +22,7 @@ const login = async (userData) => {
 const signOut = async ()=>{
     const response = await axios.put(`${auth_base_url}/logout`,{}, config)
     if(response.data){
-        if(localStorage.getItem('user')) {
-            localStorage.removeItem('user')
-          }
-          if(localStorage.getItem('collapsed')) {
-            localStorage.removeItem('collapsed')
-          }
-          if(localStorage.getItem('selectedKey')){
-            localStorage.removeItem('selectedKey')
-    
-          }
+      ['user', 'collapsed', 'selectedKey', 'dashboardThemeState' , 'tour'].forEach((key) => localStorage.removeItem(key));
     }
     // console.log(response.data)
     return response.data

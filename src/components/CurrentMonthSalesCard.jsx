@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { GoArrowUpRight } from "react-icons/go";
 import { GoArrowDownRight } from "react-icons/go";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getMonthWiseOrderStats } from "../features/auth/authSlice";
 
 function CardMonthSalesCard() {
+  const dispatch =  useDispatch()
   const monthNames = [
     "January",
     "February",
@@ -53,9 +55,12 @@ function CardMonthSalesCard() {
     setGrowth(result);
   }, [monthWiseOrderStats]);
 
+  useEffect(() => {
+    dispatch(getMonthWiseOrderStats());
+  }, [dispatch]);
 
   return (
-    <div className="shadow-lg bg-gray-50 rounded-sm px-4 py-4 grid gap-4 w-full">
+    <div className="shadow-lg bg-gray-50 rounded-md px-4 py-4 grid gap-4 w-full min-h-36">
       <p className="capitalize font-semibold text-xl text-gray-600">
         Total Sales <span className="text-sm text-black">({currentMonthData?.month})</span>
       </p>

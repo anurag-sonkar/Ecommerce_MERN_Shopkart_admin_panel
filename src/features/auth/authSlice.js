@@ -9,7 +9,7 @@ const initialState = {
   user: getUserFromLocalStorage?.result?.user,
   registerState: {},
   monthWiseOrderStats: [],
-yearWiseOrderStats : [],
+  yearWiseOrderStats: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -18,7 +18,6 @@ yearWiseOrderStats : [],
 
 export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
   try {
-    console.log(user);
     return await authService.login(user);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -130,7 +129,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.monthWiseOrderStats = [];
+        // state.monthWiseOrderStats = [];
         state.message = action.payload.message;
       })
       .addCase(getYearWiseOrderStats.pending, (state) => {

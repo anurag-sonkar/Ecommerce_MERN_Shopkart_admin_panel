@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { GoArrowUpRight } from "react-icons/go";
 import { GoArrowDownRight } from "react-icons/go";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getMonthWiseOrderStats } from "../features/auth/authSlice";
 
 function CardMonthIncomeCard() {
+  const dispatch =  useDispatch()
+
   const monthNames = [
     "January",
     "February",
@@ -53,11 +56,15 @@ function CardMonthIncomeCard() {
     setGrowth(result);
   }, [monthWiseOrderStats]);
 
+  useEffect(() => {
+    dispatch(getMonthWiseOrderStats());
+  }, [dispatch]);
+
   // console.log("Current Month Data:", currentMonthData);
   // console.log("Previous Month Data:", previousMonthData);
 
   return (
-    <div className="shadow-lg bg-gray-50 rounded-sm px-4 py-4 grid gap-4 w-full">
+    <div className="shadow-lg bg-gray-50 rounded-sm px-4 py-4 grid gap-4 w-full min-h-36">
       <p className="capitalize font-semibold text-xl text-gray-600">
         Total Income <span className="text-sm text-black">({currentMonthData?.month})</span>
       </p>

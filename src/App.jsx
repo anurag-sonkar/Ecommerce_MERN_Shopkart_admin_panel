@@ -43,8 +43,9 @@ function App() {
 
   useEffect(() => {
     // console.log( user, isLoading, isError, isSuccess, message )
+    console.log(user)
     if (user) {
-      navigate(pathname);
+      navigate('/admin');
     } else {
       navigate("/");
     }

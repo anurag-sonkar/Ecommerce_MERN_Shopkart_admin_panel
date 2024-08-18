@@ -17,89 +17,7 @@ import CardMonthIncomeCard from "../components/CurrentMonthIncomeCard";
 import CardMonthSalesCard from "../components/CurrentMonthSalesCard";
 import { getAllOrders, updateOrders } from "../features/orders/ordersSlice";
 
-// const data = [
-//     {
-//       month: 'Jan',
-//       sales : 20,
-//     },
-//     {
-//       month: 'Feb',
-//       sales : 62,
-//     },
-//     {
-//       month: 'March',
-//       sales : 40,
-//     },
-//     {
-//       month: 'April',
-//       sales : 26
-//     },
-//     {
-//       month: 'May',
-//       sales : 68
-//     },
-//     {
-//       month: 'June',
-//       sales : 62
-//     },
-//     {
-//       month: 'July',
-//       sales : 62
-//     },
-//     {
-//       month: 'August',
-//       sales : 69
-//     },
-//     {
-//       month: 'September',
-//       sales : 62
-//     },
-//     {
-//       month: 'October',
-//       sales : 30
-//     },
-//     {
-//       month: 'November',
-//       sales : 60
-//     },
-//     {
-//     month : "December",
-//       sales : 62
-//     },
-//   ];
 
-const dataSource = [
-  {
-    key: "1",
-    name: "Mike",
-    age: 32,
-    address: "10 Downing Street",
-  },
-  {
-    key: "2",
-    name: "John",
-    age: 42,
-    address: "10 Downing Street",
-  },
-];
-
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-  },
-];
 function Dashboard() {
   const [orderStateFirst, setOrderStateFirst] = useState("Ordered");
   const [orderStateSecond, setOrderStateSecond] = useState("Processing");
@@ -119,47 +37,42 @@ function Dashboard() {
     "December",
   ];
   const dispatch = useDispatch();
-  const { monthWiseOrderStats } = useSelector((state) => state.auth);
-  const { orders, isLoading, isError, isSuccess, message } = useSelector(
+  const { monthWiseOrderStats , user, isLoading } = useSelector((state) => state.auth);
+  const { orders, isError, isSuccess, message } = useSelector(
     (state) => state.orders
   );
+  
+  useEffect(
+    ()=>{
+      dispatch(getAllOrders())
+      dispatch(getMonthWiseOrderStats())
+    },[dispatch]
+  )
+
   // console.log(monthWiseOrderStats);
   // const [gridCount, setGridCount] = useState(4);
 
-  const salesData = monthNames.map((ele) => {
-    const filterData = monthWiseOrderStats.filter((data) => data.month === ele);
-    // console.log("filterData", filterData)
-    if (filterData.length > 0) {
-      return {
-        month: ele,
-        sales: filterData[0].orderCount,
-      };
-    } else {
-      return {
-        month: ele,
-        sales: 0,
-      };
-    }
-  });
+  /* Using React.useMemo to memoize salesData and incomeData. This ensures that these values are recalculated only when monthWiseOrderStats changes, optimizing performance and avoiding unnecessary recalculations */
 
-  const incomeData = monthNames.map((ele) => {
-    const filterData = monthWiseOrderStats.filter((data) => data.month === ele);
-    // console.log("filterData", filterData)
-    if (filterData.length > 0) {
-      return {
-        month: ele,
-        income: filterData[0].amount,
-      };
-    } else {
-      return {
-        month: ele,
-        income: 0,
-      };
-    }
-  });
+  const salesData = React.useMemo(() => monthNames.map((ele) => {
+    const filterData = monthWiseOrderStats?.filter((data) => data.month === ele);
+    return {
+      month: ele,
+      sales: filterData?.length > 0 ? filterData[0].orderCount : 0,
+    };
+  }), [monthWiseOrderStats]);
+  
+  const incomeData = React.useMemo(() => monthNames.map((ele) => {
+    const filterData = monthWiseOrderStats?.filter((data) => data.month === ele);
+    return {
+      month: ele,
+      income: filterData?.length > 0 ? filterData[0].amount : 0,
+    };
+  }), [monthWiseOrderStats]);
 
   const [dashboardThemeState, setDashboardThemeState] = useState(() => {
     const savedState = localStorage.getItem("dashboardThemeState");
+    console.log(JSON.parse(savedState))
     return savedState
       ? JSON.parse(savedState)
       : {
@@ -191,6 +104,8 @@ function Dashboard() {
       gridCount: count,
     });
   };
+
+  console.log(dashboardThemeState)
 
   /* update staus order */
   const handleOrderStatus = (value, id) => {
@@ -225,10 +140,7 @@ function Dashboard() {
     );
   }, [dashboardThemeState]);
 
-  useEffect(() => {
-    dispatch(getMonthWiseOrderStats());
-    dispatch(getAllOrders());
-  }, [dispatch]);
+ 
 
   const columns = [
     {
@@ -454,36 +366,84 @@ function Dashboard() {
     {
       title: 'Current Year Total Income',
       description: 'Track your current year revenue and growth.',
+      cover: (
+        <img
+          alt="tour.png"
+          src="https://user-images.githubusercontent.com/5378891/197385811-55df8480-7ff4-44bd-9d43-a7dade598d70.png"
+        />
+      ),
       target: () => ref1.current,
     },
     {
       title: 'Current Month Revenue',
       description: 'Compare growth rate with the previous month.',
+      cover: (
+        <img
+          alt="tour.png"
+          src="../src/assets/growth-2.png"
+          className="w-24 h-24 object-contain"
+        />
+      ),
       target: () => ref2.current,
     },
     {
       title: 'Current Month Sales',
       description: 'Compare sales with the previous month.',
+      cover: (
+        <img
+          alt="tour.png"
+          src="../src/assets/growth-1.png"
+          className="w-24 h-24 object-contain"
+        />
+      ),
       target: () => ref3.current,
     },
     {
       title: 'Horizontal Grid Visualization',
       description: 'View the current month sales in a horizontal grid.',
+      cover: (
+        <img
+          alt="tour.png"
+          src="../src/assets/hori-grid.png"
+          className="w-24 h-24 object-contain"
+        />
+      ),
       target: () => ref4.current,
     },
     {
       title: 'Change Grid Orientation',
       description: 'Switch between horizontal and vertical grid views.',
+      cover: (
+        <img
+          alt="tour.png"
+          src="../src/assets/veri-grid.png"
+          className="w-24 h-24 object-contain"
+        />
+      ),
       target: () => ref5.current,
     },
     {
       title: 'Current Month Income Statistics',
       description: 'Visualize the current month income statistics.',
+      cover: (
+        <img
+          alt="tour.png"
+          src="../src/assets/sales.png"
+          className="w-24 h-24 object-contain"
+        />
+      ),
       target: () => ref6.current,
     },
     {
       title: 'Current Month Sales Statistics',
       description: 'Visualize the current month sales statistics.',
+      cover: (
+        <img
+          alt="tour.png"
+          src="../src/assets/bargraph.png"
+          className="w-28 h-28 object-contain"
+        />
+      ),
       target: () => ref7.current,
     },
   ];
@@ -507,24 +467,22 @@ function Dashboard() {
     localStorage.setItem('tour', JSON.stringify(false)); // update tour state to false after use
   }, []);
   
+  
 
   return (
     <>
-        <Divider />
       <Space>
-      <main className="roboto-regular">
+        <Divider />
+      <main className="roboto-regular w-full">
       <h1 className="text-3xl font-bold my-4">Dashboard</h1>
       {/* grid container - cards*/}
       <section className="grid sm:grid-cols-3 gap-3">
-        {/* card-1 */}
         <div ref={ref1}>
         <CurrentYearIncomeRevenueCard />
         </div>
-        {/* card-2 */}
         <div ref={ref2}>
         <CardMonthIncomeCard />
         </div>
-        {/* card-3  - current month data*/}
         <div ref={ref3}>
         <CardMonthSalesCard />
         </div>
@@ -532,7 +490,7 @@ function Dashboard() {
         
 
       {/* sales stats */}
-      <section className="mt-8 grid grid-cols-8 w-full">
+      <section className="mt-8 grid grid-cols-2">
         <div className="col-span-8 w-full flex gap-1 justify-end">
           <div>
             <Select

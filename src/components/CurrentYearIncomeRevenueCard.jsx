@@ -38,7 +38,7 @@ function CurrentYearIncomeRevenueCard() {
     },[yearWiseOrderStats]
   )
 
-  console.log(currentYearData , previousYearData , growth)
+  // console.log(currentYearData , previousYearData , growth)
 
 
   
@@ -47,11 +47,10 @@ function CurrentYearIncomeRevenueCard() {
   useEffect(
     ()=>{
       dispatch(getYearWiseOrderStats())
-
-    },[]
+    },[dispatch]
   )
   return (
-    <div className="shadow-lg bg-gray-50 rounded-sm px-4 py-4 grid gap-4 w-full">
+    <div className="shadow-lg bg-gray-50 rounded-sm px-4 py-4 grid gap-4 w-full min-h-36">
       <p className="capitalize font-semibold text-xl text-gray-600">
         Total Income <span className="text-sm text-black">({currentYearData?.year || ""})</span>
       </p>

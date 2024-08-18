@@ -48,7 +48,7 @@ function MainLayout() {
 
   const handleSignOut =  (e)=>{
     e.preventDefault();
-    dispatch(signOut())
+    const signOutPromise = dispatch(signOut()).unwrap()
     toast.promise(
       signOutPromise,
       {
@@ -88,6 +88,8 @@ function MainLayout() {
     }
   }, []);
 
+  
+
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
     localStorage.setItem("selectedKey", key);
@@ -98,6 +100,8 @@ function MainLayout() {
     setCollapsed(newCollapsedState);
     localStorage.setItem("collapsed", newCollapsedState);
   };
+
+
 
   return (
     <Layout>
