@@ -53,6 +53,7 @@ function Customers() {
         dataIndex: 'sno',
         key: 'sno',
         sorter: (a, b) => a.sno - b.sno,
+        
       },
     {
       title: 'Name',
@@ -105,7 +106,7 @@ function Customers() {
     name: customer?.name,
     email: customer?.email,
     mobile: customer?.mobile,
-    profile : <img src={customer?.imgpath?.url || "../src/assets/profile.png"} className="w-12 h-12 rounded-full object-cover border-2 border-blue-100 p-[1px]" />,
+    profile : <img src={customer?.imgpath?.url || "../src/assets/profile.png"} className="w-9 h-9 rounded-full object-cover border-2 border-blue-100 p-[0.5px]" />,
     statusValue : customer?.isBlocked ? "Blocked" : "Unblocked" 
   }));
   
@@ -133,12 +134,38 @@ function Customers() {
     
   }, [dispatch]);
   
+  
 
   return (
-    <section className='mt-4 relative'>
-      <h1 className='text-3xl font-bold my-4'>Customers</h1>
-      {isError && <p>Error: {message}</p>}
-      <Table dataSource={dataSource} columns={columns} scroll={{ x: 1000 }}/>
+    <section className='mt-4 relative roboto-regular'>
+      <div className="flex justify-between items-center">
+      <h1 className="text-4xl mb-3 roboto-black">Customers</h1>
+      <div className="flex gap-2">
+        <div className="flex items-center gap-1">
+          <div className="order-status unblocked"></div>
+          <div>Unblocked</div>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="order-status blocked"></div>
+          <div>Blocked</div>
+        </div>
+       
+      </div>
+      </div>
+      {/* {isError && <p>Error: {message}</p>} */}
+      <Table dataSource={dataSource} columns={columns} scroll={{ x: 1000 }} 
+      rowClassName={(record) => {
+          switch (record.statusValue) {
+    case 'Unblocked':
+      return 'unblocked'; 
+    case 'Blocked':
+      return 'blocked'; 
+    
+    default:
+      return '';
+  }
+}}
+      />
       {isLoading && (
         <div className="absolute top-0 left-0 w-full min-h-screen h-full flex justify-center items-center bg-gray-200 bg-opacity-50">
           <Loader />

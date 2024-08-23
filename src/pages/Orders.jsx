@@ -14,7 +14,7 @@ function Orders() {
   const { orders, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.orders
   );
-  // console.log({ orders, isLoading, isError, isSuccess, message });
+  console.log({ orders, isLoading, isError, isSuccess, message });
 
   /* update order status */
   const handleChange = (value, id) => {
@@ -261,14 +261,60 @@ function Orders() {
   }, [dispatch]);
 
   return (
-    <section className="mt-4 relative">
-      <h1 className="text-3xl font-bold my-4">Orders</h1>
-      {/* {isError && <p>Error: {message}</p>} */}
+    <section className="mt-4 relative roboto-regular">
+      <div className="flex justify-between items-center">
+      <h1 className="text-4xl mb-3 roboto-black">Orders</h1>
+      <div className="flex gap-2">
+        <div className="flex items-center gap-1">
+          <div className="order-status delivered"></div>
+          <div>Delivered</div>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="order-status rejected"></div>
+          <div>Rejected</div>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="order-status cancelled"></div>
+          <div>Cancelled</div>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="order-status ordered "></div>
+          <div>Ordered</div>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="order-status processing "></div>
+          <div>Processing</div>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="order-status dispatched"></div>
+          <div>Dispatched</div>
+        </div>
+      </div>
+      </div>
+      
       <Table
         columns={columns}
         dataSource={dataSource}
         expandable={{ expandedRowRender }}
         scroll={{ x: 1000 }}
+        rowClassName={(record) => {
+          switch (record.statusValue) {
+    case 'Delivered':
+      return 'delivered'; 
+    case 'Rejected':
+      return 'rejected'; 
+    case 'Cancelled':
+      return 'cancelled'; 
+    case 'Ordered':
+      return 'ordered'; 
+    case 'Processing':
+      return 'processing'; 
+    case 'Dispatched':
+      return 'dispatched'; 
+    default:
+      return '';
+  }
+}}
       />
       {isLoading && (
         <div className="absolute top-0 left-0 w-full min-h-screen h-full flex justify-center items-center bg-gray-200 bg-opacity-50">

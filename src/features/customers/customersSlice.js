@@ -47,8 +47,23 @@ const customersSlice = createSlice({
         state.isSuccess = false;
         // state.customers = [];
         state.message = action.payload;
-      });
+      })
+      .addCase(updateCustomerStatus.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateCustomerStatus.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.customers = action.payload;
+      })
+      .addCase(updateCustomerStatus.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        // state.customers = [];
+        state.message = action.payload;
+      })
   }
-});
+})
 
 export default customersSlice.reducer;

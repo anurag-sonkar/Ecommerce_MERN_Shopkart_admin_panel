@@ -1,6 +1,6 @@
-import React, { useEffect, useState,useRef } from "react";
-import { EllipsisOutlined } from '@ant-design/icons';
-import { Select, Space, Table,Button, Divider, Tour } from "antd";
+import React, { useEffect, useState, useRef } from "react";
+import { EllipsisOutlined } from "@ant-design/icons";
+import { Select, Space, Table, Button, Divider, Tour } from "antd";
 import {
   BarChart,
   Bar,
@@ -14,8 +14,11 @@ import { useDispatch, useSelector } from "react-redux";
 import CurrentYearIncomeRevenueCard from "../components/CurrentYearIncomeRevenueCard";
 import CardMonthIncomeCard from "../components/CurrentMonthIncomeCard";
 import CardMonthSalesCard from "../components/CurrentMonthSalesCard";
-import { getAllOrders, getMonthWiseOrderStats, updateOrders } from "../features/orders/ordersSlice";
-
+import {
+  getAllOrders,
+  getMonthWiseOrderStats,
+  updateOrders,
+} from "../features/orders/ordersSlice";
 
 function Dashboard() {
   const [orderStateFirst, setOrderStateFirst] = useState("Ordered");
@@ -36,36 +39,45 @@ function Dashboard() {
     "December",
   ];
   const dispatch = useDispatch();
-  const { orders,monthWiseOrderStats, isError, isSuccess, message } = useSelector(
-    (state) => state.orders
-  );
-  
-
+  const { orders, monthWiseOrderStats, isError, isSuccess, message } =
+    useSelector((state) => state.orders);
 
   console.log(monthWiseOrderStats);
   // const [gridCount, setGridCount] = useState(4);
 
   /* Using React.useMemo to memoize salesData and incomeData. This ensures that these values are recalculated only when monthWiseOrderStats changes, optimizing performance and avoiding unnecessary recalculations */
 
-  const salesData = React.useMemo(() => monthNames.map((ele) => {
-    const filterData = monthWiseOrderStats?.filter((data) => data.month === ele);
-    return {
-      month: ele,
-      sales: filterData?.length > 0 ? filterData[0].orderCount : 0,
-    };
-  }), [monthWiseOrderStats]);
-  
-  const incomeData = React.useMemo(() => monthNames.map((ele) => {
-    const filterData = monthWiseOrderStats?.filter((data) => data.month === ele);
-    return {
-      month: ele,
-      income: filterData?.length > 0 ? filterData[0].amount : 0,
-    };
-  }), [monthWiseOrderStats]);
+  const salesData = React.useMemo(
+    () =>
+      monthNames.map((ele) => {
+        const filterData = monthWiseOrderStats?.filter(
+          (data) => data.month === ele
+        );
+        return {
+          month: ele,
+          sales: filterData?.length > 0 ? filterData[0].orderCount : 0,
+        };
+      }),
+    [monthWiseOrderStats]
+  );
+
+  const incomeData = React.useMemo(
+    () =>
+      monthNames.map((ele) => {
+        const filterData = monthWiseOrderStats?.filter(
+          (data) => data.month === ele
+        );
+        return {
+          month: ele,
+          income: filterData?.length > 0 ? filterData[0].amount : 0,
+        };
+      }),
+    [monthWiseOrderStats]
+  );
 
   const [dashboardThemeState, setDashboardThemeState] = useState(() => {
     const savedState = localStorage.getItem("dashboardThemeState");
-    console.log(JSON.parse(savedState))
+    console.log(JSON.parse(savedState));
     return savedState
       ? JSON.parse(savedState)
       : {
@@ -132,8 +144,6 @@ function Dashboard() {
       JSON.stringify(dashboardThemeState)
     );
   }, [dashboardThemeState]);
-
- 
 
   const columns = [
     {
@@ -345,7 +355,6 @@ function Dashboard() {
     setOrderStateThird(value);
   };
 
-
   /* tour setup */
   const ref1 = useRef(null);
   const ref2 = useRef(null);
@@ -357,8 +366,8 @@ function Dashboard() {
   const [open, setOpen] = useState(false);
   const steps = [
     {
-      title: 'Current Year Total Income',
-      description: 'Track your current year revenue and growth.',
+      title: "Current Year Total Income",
+      description: "Track your current year revenue and growth.",
       cover: (
         <img
           alt="tour.png"
@@ -368,8 +377,8 @@ function Dashboard() {
       target: () => ref1.current,
     },
     {
-      title: 'Current Month Revenue',
-      description: 'Compare growth rate with the previous month.',
+      title: "Current Month Revenue",
+      description: "Compare growth rate with the previous month.",
       cover: (
         <img
           alt="tour.png"
@@ -380,8 +389,8 @@ function Dashboard() {
       target: () => ref2.current,
     },
     {
-      title: 'Current Month Sales',
-      description: 'Compare sales with the previous month.',
+      title: "Current Month Sales",
+      description: "Compare sales with the previous month.",
       cover: (
         <img
           alt="tour.png"
@@ -392,8 +401,8 @@ function Dashboard() {
       target: () => ref3.current,
     },
     {
-      title: 'Horizontal Grid Visualization',
-      description: 'View the current month sales in a horizontal grid.',
+      title: "Horizontal Grid Visualization",
+      description: "View the current month sales in a horizontal grid.",
       cover: (
         <img
           alt="tour.png"
@@ -404,8 +413,8 @@ function Dashboard() {
       target: () => ref4.current,
     },
     {
-      title: 'Change Grid Orientation',
-      description: 'Switch between horizontal and vertical grid views.',
+      title: "Change Grid Orientation",
+      description: "Switch between horizontal and vertical grid views.",
       cover: (
         <img
           alt="tour.png"
@@ -416,8 +425,8 @@ function Dashboard() {
       target: () => ref5.current,
     },
     {
-      title: 'Current Month Income Statistics',
-      description: 'Visualize the current month income statistics.',
+      title: "Current Month Income Statistics",
+      description: "Visualize the current month income statistics.",
       cover: (
         <img
           alt="tour.png"
@@ -428,8 +437,8 @@ function Dashboard() {
       target: () => ref6.current,
     },
     {
-      title: 'Current Month Sales Statistics',
-      description: 'Visualize the current month sales statistics.',
+      title: "Current Month Sales Statistics",
+      description: "Visualize the current month sales statistics.",
       cover: (
         <img
           alt="tour.png"
@@ -441,268 +450,329 @@ function Dashboard() {
     },
   ];
 
-
   const handleStepChange = (currentStep) => {
     if (currentStep === 3) {
-      document.querySelector('.step4-button').click();
+      document.querySelector(".step4-button").click();
     }
     if (currentStep === 4) {
-      document.querySelector('.step5-button').click();
+      document.querySelector(".step5-button").click();
     }
-};
-
+  };
 
   useEffect(() => {
     const tourState = JSON.parse(localStorage.getItem("tour"));
     if (tourState) {
       setOpen(true);
     }
-    localStorage.setItem('tour', JSON.stringify(false)); // update tour state to false after use
+    localStorage.setItem("tour", JSON.stringify(false)); // update tour state to false after use
   }, []);
-  
-  useEffect(
-    ()=>{
-      dispatch(getMonthWiseOrderStats())
-      dispatch(getAllOrders())
-    },[dispatch]
-  )
+
+  useEffect(() => {
+    dispatch(getMonthWiseOrderStats());
+    dispatch(getAllOrders());
+  }, [dispatch]);
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto roboto-regular">
       <Space>
         <Divider />
-      <main className="roboto-regular w-full">
-      <h1 className="text-3xl font-bold my-4">Dashboard</h1>
-      {/* grid container - cards*/}
-      <section className="grid lg:grid-cols-3 md:grid-cols-1 gap-3">
-        <div className="max-w-[19rem]" ref={ref1}>
-        <CurrentYearIncomeRevenueCard />
-        </div>
-        <div className="max-w-[19rem]" ref={ref2}>
-        <CardMonthIncomeCard />
-        </div>
-        <div className="max-w-[19rem]" ref={ref3}>
-        <CardMonthSalesCard />
-        </div>
-      </section>
-        
+        <main className="roboto-regular w-full">
+          <h1 className="text-4xl font-bold my-4">Dashboard</h1>
+          {/* grid container - cards*/}
+          <section className="grid lg:grid-cols-3 md:grid-cols-1 gap-3">
+            <div className="max-w-[19rem]" ref={ref1}>
+              <CurrentYearIncomeRevenueCard />
+            </div>
+            <div className="max-w-[19rem]" ref={ref2}>
+              <CardMonthIncomeCard />
+            </div>
+            <div className="max-w-[19rem]" ref={ref3}>
+              <CardMonthSalesCard />
+            </div>
+          </section>
 
-      {/* sales stats */}
-      <section className="mt-8 grid grid-cols-2">
-        <div className="col-span-8 w-full flex gap-1 justify-end">
-          <div>
-            <Select
-              // defaultValue="#8884d8"
-              value={dashboardThemeState.barColor}
-              style={{
-                width: 60,
-              }}
-              onChange={handleChange}
-              options={colorArray.map((ele) => {
-                return {
-                  value: ele,
-                  label: (
-                    <div
-                      className="w-5 h-5 rounded-full"
-                      style={{ backgroundColor: ele }}
-                    ></div>
-                  ),
-                };
-              })}
-            />
-          </div>
-          <div onClick={() => handleGridChange(4)} ref={ref4} className="step4-button">
-            <img
-              src="../src/assets/horizontal-tile.png"
-              className="w-8 h-8 border-2 rounded-md cursor-pointer px-1 py-1"
-              style={{
-                border:
-                  dashboardThemeState.gridCount === 4 ? "2px solid blue" : "",
-              }}
-            />
-          </div>
-          <div onClick={() => handleGridChange(8)} ref={ref5} className="step5-button">
-            <img
-              src="../src/assets/vertical-tile.png"
-              className="w-8 h-8 border-2 rounded-md cursor-pointer px-1 py-1"
-              style={{
-                border:
-                  dashboardThemeState.gridCount === 8 ? "2px solid blue" : "",
-              }}
-            />
-          </div>
-        </div>
-
-        <div className={`col-span-${dashboardThemeState.gridCount}`} >
-              
-
-          <h1 className="text-3xl font-bold my-4" ><span ref={ref6}>Income Statics</span></h1>
-              
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={incomeData}>
-              <XAxis dataKey="month" />
-              <YAxis />
-              {incomeData.map((data, index) => (
-                <ReferenceLine
-                  key={index}
-                  y={data.income}
-                  stroke="#ccc"
-                  strokeDasharray="1 1"
-                  label={{ value: data.income, position: "right" }} // Label showing income value
+          {/* sales stats */}
+          <section className="mt-8 grid grid-cols-2">
+            <div className="col-span-8 w-full flex gap-1 justify-end">
+              <div>
+                <Select
+                  // defaultValue="#8884d8"
+                  value={dashboardThemeState.barColor}
+                  style={{
+                    width: 60,
+                  }}
+                  onChange={handleChange}
+                  options={colorArray.map((ele) => {
+                    return {
+                      value: ele,
+                      label: (
+                        <div
+                          className="w-5 h-5 rounded-full"
+                          style={{ backgroundColor: ele }}
+                        ></div>
+                      ),
+                    };
+                  })}
                 />
-              ))}
-              <Tooltip />
-              <Bar dataKey="income" fill={dashboardThemeState.barColor} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className={`col-span-${dashboardThemeState.gridCount}`}>
-          <h1 className="text-3xl font-bold my-4"><span ref={ref7}>Sales Statics</span></h1>
-
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={salesData}>
-              <XAxis dataKey="month" />
-              <YAxis />
-              {salesData.map((data, index) => (
-                <ReferenceLine
-                  key={index}
-                  y={data.sales}
-                  stroke="#ccc"
-                  strokeDasharray="1 1"
-                  label={{ value: data.sales, position: "right" }} // Label showing income value
+              </div>
+              <div
+                onClick={() => handleGridChange(4)}
+                ref={ref4}
+                className="step4-button"
+              >
+                <img
+                  src="../src/assets/horizontal-tile.png"
+                  className="w-8 h-8 border-2 rounded-md cursor-pointer px-1 py-1"
+                  style={{
+                    border:
+                      dashboardThemeState.gridCount === 4
+                        ? "2px solid blue"
+                        : "",
+                  }}
                 />
-              ))}
-              <Tooltip />
-              <Bar dataKey="sales" fill={dashboardThemeState.barColor} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </section>
+              </div>
+              <div
+                onClick={() => handleGridChange(8)}
+                ref={ref5}
+                className="step5-button"
+              >
+                <img
+                  src="../src/assets/vertical-tile.png"
+                  className="w-8 h-8 border-2 rounded-md cursor-pointer px-1 py-1"
+                  style={{
+                    border:
+                      dashboardThemeState.gridCount === 8
+                        ? "2px solid blue"
+                        : "",
+                  }}
+                />
+              </div>
+            </div>
 
-      {/* recent orders */}
-      <section className="mt-8">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold my-4">Recent Orders</h1>
-          <div className="flex gap-1">
-          <div>
-            <Select
-              defaultValue={orderStateFirst}
-              style={{
-                width: 120,
+            <div className={`col-span-${dashboardThemeState.gridCount}`}>
+              <h1 className="text-3xl font-bold my-4">
+                <span ref={ref6}>Income Statics</span>
+              </h1>
+
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={incomeData}>
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  {incomeData.map((data, index) => (
+                    <ReferenceLine
+                      key={index}
+                      y={data.income}
+                      stroke="#ccc"
+                      strokeDasharray="1 1"
+                      label={{ value: data.income, position: "right" }} // Label showing income value
+                    />
+                  ))}
+                  <Tooltip />
+                  <Bar dataKey="income" fill={dashboardThemeState.barColor} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className={`col-span-${dashboardThemeState.gridCount}`}>
+              <h1 className="text-3xl font-bold my-4">
+                <span ref={ref7}>Sales Statics</span>
+              </h1>
+
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={salesData}>
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  {salesData.map((data, index) => (
+                    <ReferenceLine
+                      key={index}
+                      y={data.sales}
+                      stroke="#ccc"
+                      strokeDasharray="1 1"
+                      label={{ value: data.sales, position: "right" }} // Label showing income value
+                    />
+                  ))}
+                  <Tooltip />
+                  <Bar dataKey="sales" fill={dashboardThemeState.barColor} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </section>
+
+          {/* recent orders */}
+          <section className="mt-8 roboto-regular grid gap-3">
+            <div className="flex justify-between items-center">
+              <h1 className="text-4xl font-bold my-4 roboto-black">
+                Recent Orders
+              </h1>
+              <div className="flex flex-col items-end gap-2">
+                <div className="flex gap-1">
+                  <div>
+                    <Select
+                      defaultValue={orderStateFirst}
+                      style={{
+                        width: 120,
+                      }}
+                      onChange={handleOrderStateFirstChange}
+                      options={[
+                        {
+                          value: "Ordered",
+                          label: "Ordered",
+                        },
+                        {
+                          value: "Processing",
+                          label: "Processing",
+                        },
+                        {
+                          value: "Dispatched",
+                          label: "Dispatched",
+                        },
+                        {
+                          value: "Cancelled",
+                          label: "Cancelled",
+                        },
+                        {
+                          value: "Delivered",
+                          label: "Delivered",
+                        },
+                        {
+                          value: "Rejected",
+                          label: "Rejected",
+                        },
+                      ]}
+                    />
+                  </div>
+                  <div>
+                    <Select
+                      defaultValue={orderStateSecond}
+                      style={{
+                        width: 120,
+                      }}
+                      onChange={handleOrderStateSecondChange}
+                      options={[
+                        {
+                          value: "Ordered",
+                          label: "Ordered",
+                        },
+                        {
+                          value: "Processing",
+                          label: "Processing",
+                        },
+                        {
+                          value: "Dispatched",
+                          label: "Dispatched",
+                        },
+                        {
+                          value: "Cancelled",
+                          label: "Cancelled",
+                        },
+                        {
+                          value: "Delivered",
+                          label: "Delivered",
+                        },
+                        {
+                          value: "Rejected",
+                          label: "Rejected",
+                        },
+                      ]}
+                    />
+                  </div>
+                  <div>
+                    <Select
+                      defaultValue={orderStateThird}
+                      style={{
+                        width: 120,
+                      }}
+                      onChange={handleOrderStateThirdChange}
+                      options={[
+                        {
+                          value: "Ordered",
+                          label: "Ordered",
+                        },
+                        {
+                          value: "Processing",
+                          label: "Processing",
+                        },
+                        {
+                          value: "Dispatched",
+                          label: "Dispatched",
+                        },
+                        {
+                          value: "Cancelled",
+                          label: "Cancelled",
+                        },
+                        {
+                          value: "Delivered",
+                          label: "Delivered",
+                        },
+                        {
+                          value: "Rejected",
+                          label: "Rejected",
+                        },
+                      ]}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <div className="flex items-center gap-1">
+                    <div className="order-status delivered"></div>
+                    <div>Delivered</div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="order-status rejected"></div>
+                    <div>Rejected</div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="order-status cancelled"></div>
+                    <div>Cancelled</div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="order-status ordered "></div>
+                    <div>Ordered</div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="order-status processing "></div>
+                    <div>Processing</div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="order-status dispatched"></div>
+                    <div>Dispatched</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Table
+              columns={columns}
+              dataSource={dataSource}
+              expandable={{ expandedRowRender }}
+              scroll={{ x: 1000 }}
+              rowClassName={(record) => {
+                switch (record.statusValue) {
+                  case "Delivered":
+                    return "delivered";
+                  case "Rejected":
+                    return "rejected";
+                  case "Cancelled":
+                    return "cancelled";
+                  case "Ordered":
+                    return "ordered";
+                  case "Processing":
+                    return "processing";
+                  case "Dispatched":
+                    return "dispatched";
+                  default:
+                    return "";
+                }
               }}
-              onChange={handleOrderStateFirstChange}
-              options={[
-                {
-                  value: "Ordered",
-                  label: "Ordered",
-                },
-                {
-                  value: "Processing",
-                  label: "Processing",
-                },
-                {
-                  value: "Dispatched",
-                  label: "Dispatched",
-                },
-                {
-                  value: "Cancelled",
-                  label: "Cancelled",
-                },
-                {
-                  value: "Delivered",
-                  label: "Delivered",
-                },
-                {
-                  value: "Rejected",
-                  label: "Rejected",
-                },
-              ]}
             />
-          </div>
-          <div>
-            <Select
-              defaultValue={orderStateSecond}
-              style={{
-                width: 120,
-              }}
-              onChange={handleOrderStateSecondChange}
-              options={[
-                {
-                  value: "Ordered",
-                  label: "Ordered",
-                },
-                {
-                  value: "Processing",
-                  label: "Processing",
-                },
-                {
-                  value: "Dispatched",
-                  label: "Dispatched",
-                },
-                {
-                  value: "Cancelled",
-                  label: "Cancelled",
-                },
-                {
-                  value: "Delivered",
-                  label: "Delivered",
-                },
-                {
-                  value: "Rejected",
-                  label: "Rejected",
-                },
-              ]}
-            />
-          </div>
-          <div>
-            <Select
-              defaultValue={orderStateThird}
-              style={{
-                width: 120,
-              }}
-              onChange={handleOrderStateThirdChange}
-              options={[
-                {
-                  value: "Ordered",
-                  label: "Ordered",
-                },
-                {
-                  value: "Processing",
-                  label: "Processing",
-                },
-                {
-                  value: "Dispatched",
-                  label: "Dispatched",
-                },
-                {
-                  value: "Cancelled",
-                  label: "Cancelled",
-                },
-                {
-                  value: "Delivered",
-                  label: "Delivered",
-                },
-                {
-                  value: "Rejected",
-                  label: "Rejected",
-                },
-              ]}
-            />
-          </div>
-          </div>
-        </div>
-        <Table
-          columns={columns}
-          dataSource={dataSource}
-          expandable={{ expandedRowRender }}
-          scroll={{ x: 1000 }} 
-        />
-      </section>
-    </main>
-    </Space>
-        <Tour open={open} onClose={() => setOpen(false)} steps={steps} onChange={handleStepChange}/>
-    
+          </section>
+        </main>
+      </Space>
+      <Tour
+        open={open}
+        onClose={() => setOpen(false)}
+        steps={steps}
+        onChange={handleStepChange}
+      />
     </div>
   );
 }

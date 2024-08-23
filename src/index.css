@@ -118,3 +118,34 @@
 
 
 
+.order-status{
+  width: 12px;
+  height: 12px;
+border-radius: 50%;
+border: 2px solid #fff;
+}
+
+.delivered , .unblocked , .contacted{
+  background-color: #c8e6c9d7;
+}
+.rejected , .blocked , .pending{
+  background-color: #ffcdd2;
+  
+}
+.cancelled{
+  
+  background-color: #eeeeee;
+}
+.ordered{
+  background-color: #bbdefb;
+  
+}
+.processing{
+  background-color: #fff9c4;
+  
+}
+.dispatched{
+  background-color: #e1bee7;
+
+}
+

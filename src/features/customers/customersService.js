@@ -14,10 +14,9 @@ const getAllUsers = async () => {
 
 const updateCustomerStatus = async (data) => {
     const {id , status} = data
-    console.log(data)
     const response = await axios.put(`${customers_base_url}/user-status/${id}`, {status:status},getConfig());
 
-    console.log(response.data.users)
+    console.log(response)
     
     return response.data.users; 
 }
