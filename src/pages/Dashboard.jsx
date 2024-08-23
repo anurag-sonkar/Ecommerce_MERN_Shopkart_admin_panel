@@ -11,11 +11,10 @@ import {
   ReferenceLine,
 } from "recharts";
 import { useDispatch, useSelector } from "react-redux";
-import { getMonthWiseOrderStats } from "../features/auth/authSlice";
 import CurrentYearIncomeRevenueCard from "../components/CurrentYearIncomeRevenueCard";
 import CardMonthIncomeCard from "../components/CurrentMonthIncomeCard";
 import CardMonthSalesCard from "../components/CurrentMonthSalesCard";
-import { getAllOrders, updateOrders } from "../features/orders/ordersSlice";
+import { getAllOrders, getMonthWiseOrderStats, updateOrders } from "../features/orders/ordersSlice";
 
 
 function Dashboard() {
@@ -37,19 +36,13 @@ function Dashboard() {
     "December",
   ];
   const dispatch = useDispatch();
-  const { monthWiseOrderStats , user, isLoading } = useSelector((state) => state.auth);
-  const { orders, isError, isSuccess, message } = useSelector(
+  const { orders,monthWiseOrderStats, isError, isSuccess, message } = useSelector(
     (state) => state.orders
   );
   
-  useEffect(
-    ()=>{
-      dispatch(getAllOrders())
-      dispatch(getMonthWiseOrderStats())
-    },[dispatch]
-  )
 
-  // console.log(monthWiseOrderStats);
+
+  console.log(monthWiseOrderStats);
   // const [gridCount, setGridCount] = useState(4);
 
   /* Using React.useMemo to memoize salesData and incomeData. This ensures that these values are recalculated only when monthWiseOrderStats changes, optimizing performance and avoiding unnecessary recalculations */
@@ -105,7 +98,7 @@ function Dashboard() {
     });
   };
 
-  console.log(dashboardThemeState)
+  // console.log(dashboardThemeState)
 
   /* update staus order */
   const handleOrderStatus = (value, id) => {
@@ -467,23 +460,28 @@ function Dashboard() {
     localStorage.setItem('tour', JSON.stringify(false)); // update tour state to false after use
   }, []);
   
-  
+  useEffect(
+    ()=>{
+      dispatch(getMonthWiseOrderStats())
+      dispatch(getAllOrders())
+    },[dispatch]
+  )
 
   return (
-    <>
+    <div className="overflow-x-auto">
       <Space>
         <Divider />
       <main className="roboto-regular w-full">
       <h1 className="text-3xl font-bold my-4">Dashboard</h1>
       {/* grid container - cards*/}
-      <section className="grid sm:grid-cols-3 gap-3">
-        <div ref={ref1}>
+      <section className="grid lg:grid-cols-3 md:grid-cols-1 gap-3">
+        <div className="max-w-[19rem]" ref={ref1}>
         <CurrentYearIncomeRevenueCard />
         </div>
-        <div ref={ref2}>
+        <div className="max-w-[19rem]" ref={ref2}>
         <CardMonthIncomeCard />
         </div>
-        <div ref={ref3}>
+        <div className="max-w-[19rem]" ref={ref3}>
         <CardMonthSalesCard />
         </div>
       </section>
@@ -698,14 +696,14 @@ function Dashboard() {
           columns={columns}
           dataSource={dataSource}
           expandable={{ expandedRowRender }}
-          scroll={{ x: 1000 }}
+          scroll={{ x: 1000 }} 
         />
       </section>
     </main>
     </Space>
         <Tour open={open} onClose={() => setOpen(false)} steps={steps} onChange={handleStepChange}/>
     
-    </>
+    </div>
   );
 }
 

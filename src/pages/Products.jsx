@@ -18,7 +18,7 @@ function Products() {
   const { products, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.products
   );
-  console.log(products)
+  // console.log(products)
   /* modal */
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);

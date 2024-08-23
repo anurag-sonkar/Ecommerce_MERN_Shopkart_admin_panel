@@ -18,6 +18,15 @@ export const getAllUsers = createAsyncThunk('customers/getAllUsers', async (_, t
   }
 });
 
+export const updateCustomerStatus = createAsyncThunk('customers/updateCustomerStatus', async (data, thunkAPI) => {
+  try {
+    return await customersService.updateCustomerStatus(data);
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.error) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const customersSlice = createSlice({
   name: 'customers',
   initialState,
@@ -36,7 +45,7 @@ const customersSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.customers = [];
+        // state.customers = [];
         state.message = action.payload;
       });
   }

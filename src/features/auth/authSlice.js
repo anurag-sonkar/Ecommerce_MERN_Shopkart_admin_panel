@@ -8,8 +8,6 @@ const getUserFromLocalStorage = localStorage.getItem("user")
 const initialState = {
   user: getUserFromLocalStorage?.result?.user,
   registerState: {},
-  monthWiseOrderStats: [],
-  yearWiseOrderStats: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -65,35 +63,7 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
-export const getMonthWiseOrderStats = createAsyncThunk(
-  "orders/getMonthWiseOrderStats",
-  async (_, thunkAPI) => {
-    try {
-      return await authService.getMonthWiseOrderStats();
-    } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
 
-export const getYearWiseOrderStats = createAsyncThunk(
-  "orders/getYearWiseOrderStats",
-  async (_, thunkAPI) => {
-    try {
-      return await authService.getYearWiseOrderStats();
-    } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.error) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
 
 const authSlice = createSlice({
   name: "auth",
@@ -107,7 +77,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload.user;
+        state.user = action.payload.user; //
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
@@ -116,38 +86,8 @@ const authSlice = createSlice({
         state.user = null;
         state.message = action.payload.response.data.error;
       })
-      .addCase(getMonthWiseOrderStats.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getMonthWiseOrderStats.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.monthWiseOrderStats = action.payload.response;
-        state.message = action.payload.message;
-      })
-      .addCase(getMonthWiseOrderStats.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        // state.monthWiseOrderStats = [];
-        state.message = action.payload.message;
-      })
-      .addCase(getYearWiseOrderStats.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getYearWiseOrderStats.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.yearWiseOrderStats = action.payload.response;
-        state.message = action.payload.message;
-      })
-      .addCase(getYearWiseOrderStats.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.yearWiseOrderStats = [];
-        state.message = action.payload.message;
-      })
+      
+      
       .addCase(register.pending, (state) => {
         state.isLoading = true;
       })
@@ -162,7 +102,7 @@ const authSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.user = null;
-        state.message = action.payload.response.data.error;
+        // state.message = action.payload.response.data.error;
       })
       .addCase(signOut.pending, (state) => {
         state.isLoading = true;

@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Signup.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,7 +6,7 @@ import { register } from "../../../features/auth/authSlice";
 import { toast, Bounce } from "react-toastify";
 // import Loader from "../components/Loader";
 
-/* check screen size for animation */
+/* check screen size for animation after account create*/
 const useScreenSize = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
 
@@ -31,74 +31,149 @@ function SignupForm({ setSignIn }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(null);
-  const [error, setError] = useState("");
-  const [imagePreview , setImagePreview] = useState("")
+  const [imagePreview, setImagePreview] = useState("");
   const isLargeScreen = useScreenSize(); // custom hook
+  const [error, setError] = useState({});
+  const [catchError, setCatchError] = useState(""); // backend error
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, registerState, isLoading, isError, isSuccess, message } =
     useSelector((state) => state.auth);
 
-  // console.log({user,registerState, isLoading, isError, isSuccess, message})
+  // Function to validate form fields
+  const validateForm = () => {
+    const newErrors = {};
+    if (!name) {
+      newErrors.nameError = "name is required";
+    } else if (!email) {
+      newErrors.emailError = "email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.emailError = "enter a valid email";
+    } else if (!password) {
+      newErrors.passwordError = "Password is required";
+    } else if (!confirmPassword) {
+      newErrors.confirmPasswordError = "Confirm your password";
+    }
+    // else if(password !== confirmPassword){
+    //   newErrors.passwordMatchError = "password and confirm password is not matched"
+    // }
+    // console.log(newErrors)
+    return newErrors;
+  };
+
+  // Apply border styles based on error states
+  useEffect(() => {
+    const nameField = document.querySelector('input[name="name"]');
+    const emailField = document.querySelector('input[name="email"]');
+    const passwordField = document.querySelector('input[name="password"]');
+    const confirmPasswordField = document.querySelector(
+      'input[name="confirmPassword"]'
+    );
+
+    if (nameField) {
+      nameField.style.border = error.nameError ? "2px solid crimson" : "";
+    }
+    if (emailField) {
+      emailField.style.border = error.emailError ? "2px solid crimson" : "";
+    }
+    if (passwordField) {
+      passwordField.style.border = error.passwordError
+        ? "2px solid crimson"
+        : "";
+    }
+    if (confirmPasswordField) {
+      confirmPasswordField.style.border = error.confirmPasswordError
+        ? "2px solid crimson"
+        : "";
+    }
+  }, [error]);
+
+
+  // hanldle image - limit size as backend limit 1 mb 
+  // const handleImageChange = (event) => {
+  //   const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.onloadend = () => {
+  //     setImagePreview(reader.result);
+  //     setImage(file);
+  //   };
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-      setImage(file)
-    };
     if (file) {
+      // Check file size (1 MB = 1024 * 1024 bytes)
+      if (file.size > 1024 * 1024) {
+        setCatchError("Max file size allowed is 1 MB");
+        return;
+      }else{
+        setCatchError(null)
+      }
+  
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+        setImage(file);
+      };
       reader.readAsDataURL(file);
     }
   };
+
   const handleSignup = (e) => {
     e.preventDefault();
-    if (!name || !email || !password || !confirmPassword) {
-      setError("Please fill in all fields ");
+    const newErrors = validateForm();
+    if (Object.keys(newErrors).length > 0) {
+      setError(newErrors);
       return;
-    } else {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("cpassword", confirmPassword);
-      formData.append("admin", true);
+    }
+  
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("cpassword", confirmPassword);
+    formData.append("admin", true);
+  
+    if (image) {
+      formData.append("photo", image);
+    }
 
-      if (image) {
-        formData.append("photo", image);
+    if(catchError) return
+  
+    const registerPromise = dispatch(register(formData)).unwrap();
+  
+    toast.promise(
+      registerPromise,
+      {
+        pending: "Creating Account...",
+        success: "Registered Successfully!",
+        error: "Registration failed!",
+      },
+      {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
       }
-      
-      const registerPromise = dispatch(register(formData)).unwrap();
-
-      toast.promise(
-        registerPromise,
-        {
-          pending: "Creating Account...",
-          success: "Registered Successfully!",
-          error: `Registration failed!`,
-        },
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
-        }
-      );
-
-      registerPromise.then(() => {
+    );
+  
+    registerPromise
+      .then(() => {
         if (isLargeScreen) {
           setSignIn(true);
         } else {
           navigate("/login");
         }
         toast.success(
-          `${(registerState && registerState.name) || "You can"} login now`,
+          `${(registerState?.name) || "You can"} login now`,
           {
             position: "top-right",
             autoClose: 5000,
@@ -112,51 +187,75 @@ function SignupForm({ setSignIn }) {
           }
         );
       })
-    }
+      .catch((error) => {
+        console.error("Caught error:", error); 
+        setCatchError(error.response.data.error || "An unexpected error occurred");
+      });
   };
-
+  
   return (
     <form className={styles.form}>
-    {
-      image == null ? <h1 className={styles.title}>Sign up</h1> : <div className={styles.profile}>
-        <img src={imagePreview} />
-      </div>
-    }
-      
+      {image == null ? (
+        <h1 className={styles.title}>Sign up</h1>
+      ) : (
+        <div className={styles.profile}>
+          <img src={imagePreview} />
+        </div>
+      )}
+
       <input
         type="text"
         className={styles.input}
         placeholder="Name"
         value={name}
+        name="name"
         onChange={(e) => setName(e.target.value)}
       />
+      {error.nameError && (
+        <div className={styles.errorMessage}>{error.nameError}</div>
+      )}
       <input
         type="email"
         className={styles.input}
         placeholder="Email"
         value={email}
+        name="email"
         onChange={(e) => setEmail(e.target.value)}
       />
+      {error.emailError && (
+        <div className={styles.errorMessage}>{error.emailError}</div>
+      )}
       <input
         type="password"
         className={styles.input}
         placeholder="Password"
         value={password}
+        name="password"
         onChange={(e) => setPassword(e.target.value)}
       />
+      {error.passwordError && (
+        <div className={styles.errorMessage}>{error.passwordError}</div>
+      )}
       <input
         type="password"
         className={styles.input}
         placeholder="Confirm Password"
         value={confirmPassword}
+        name="confirmPassword"
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
+       {error.confirmPasswordError && (
+        <div className={styles.errorMessage}>{error.confirmPasswordError}</div>
+      )}
+      {catchError && (
+      <div className={styles.errorMessage} style={{padding:"2px 6px" , fontSize:"10px , "}}>{catchError}</div> // Ensure catchError is displayed here
+    )}
       <input
         type="file"
         className={styles.input}
         onChange={handleImageChange}
       />
-      {error && <div className={styles.errorMessage}>{error}</div>}
+      {/* {error && <div className={styles.errorMessage}>{error}</div>} */}
       <button type="button" className={styles.button} onClick={handleSignup}>
         Sign Up
       </button>

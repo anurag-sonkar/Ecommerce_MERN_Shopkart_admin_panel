@@ -1,11 +1,7 @@
 import axios from "axios";
 import { auth_base_url } from "../../utils/base_url";
-import { config } from "../../utils/config";
-
-// const forgotPassword = async(email)=>{
-//   const response = await axios.post(`${auth_base_url}/auth/forgot-password`, email);
-//     console.log(response)
-// }
+import { getConfig } from "../../utils/config";
+// import { config, getConfig } from "../../utils/config";
 
 
 const login = async (userData) => {
@@ -13,14 +9,14 @@ const login = async (userData) => {
     const response = await axios.post(`${auth_base_url}/auth/admin-login`, userData);
     console.log(response)
 
-    if(response.data){
+    if(response.status === 201){
         localStorage.setItem('user',JSON.stringify(response.data))
     }
     return response.data.result; 
 }
 
 const signOut = async ()=>{
-    const response = await axios.put(`${auth_base_url}/logout`,{}, config)
+    const response = await axios.put(`${auth_base_url}/logout`,{}, getConfig())
     if(response.data){
       ['user', 'collapsed', 'selectedKey', 'dashboardThemeState' , 'tour'].forEach((key) => localStorage.removeItem(key));
     }
@@ -59,30 +55,12 @@ const resetPassword = async (data)=>{
   }
 }
 
-const getMonthWiseOrderStats = async () => {
-  // console.log(status,id)
-  const response = await axios.get(
-    `${auth_base_url}/getMonthWiseOrderStats`,
-    config
-  );
-// console.log(response)
-  return response.data;
-};
 
-const getYearWiseOrderStats = async () => {
-  // console.log(status,id)
-  const response = await axios.get(
-    `${auth_base_url}/getYearlyTotalOrders`,
-    config
-  );
-// console.log(response)
-  return response.data;
-};
 
 
 
 const authService = {
-    login,signOut,register,forgotPassword,resetPassword,getMonthWiseOrderStats,getYearWiseOrderStats
+    login,signOut,register,forgotPassword,resetPassword
 }
 
 export default authService;

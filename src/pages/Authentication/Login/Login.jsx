@@ -1,49 +1,83 @@
-import React,{ useState } from "react";
+import React,{ useEffect, useState } from "react";
 import styles from "./Login.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getMonthWiseOrderStats, login } from "../../../features/auth/authSlice";
+import { login } from "../../../features/auth/authSlice";
 import { toast, Bounce } from "react-toastify";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState({});
+  const [catchError , setCatchError] = useState("") // backend error
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      setError("Please fill in all fields");
-    } else {
-      const authPromise =  dispatch(login({ email, password })).unwrap();
-      toast.promise(
-        authPromise,
-        {
-          // pending: "loging...",
-          success: "login Successfully!",
-          error: `login failed!`,
-        },
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
-        }
-      );
 
-      authPromise.then(()=>{
-        localStorage.setItem('tour', JSON.stringify(true)); // setting tour as true on login success
-        // navigate('/admin');
-      })
-      setError("");
-    }
-  };
+ // Function to validate form fields
+ const validateForm = () => {
+  const newErrors = {};
+  if (!email) {
+    newErrors.emailError = "Email is required";
+  } else if (!/\S+@\S+\.\S+/.test(email)) {
+    newErrors.emailError = "Enter a valid email";
+  }
+
+  if (!password) {
+    newErrors.passwordError = "Password is required";
+  }
+
+  return newErrors;
+};
+
+// Apply border styles based on error states
+useEffect(() => {
+  const emailField = document.querySelector('input[name="email"]');
+  const passwordField = document.querySelector('input[name="password"]');
+
+  if (emailField) {
+    emailField.style.border = error.emailError ? '2px solid crimson' : '';
+  }
+  if (passwordField) {
+    passwordField.style.border = error.passwordError ? '2px solid crimson' : '';
+  }
+}, [error]);
+
+// Handle form submission
+const handleLogin = async () => {
+  const newErrors = validateForm();
+  if (Object.keys(newErrors).length > 0) {
+    setError(newErrors);
+    return;
+  }
+
+  try {
+    const authPromise = dispatch(login({ email, password })).unwrap();
+    toast.promise(
+      authPromise,
+      {
+        success: "Login Successfully!",
+        error: "Login failed!",
+      },
+      {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
+
+    // await authPromise;
+    authPromise.then(()=>{
+      localStorage.setItem('tour', JSON.stringify(true));
+    navigate('/admin');
+    })
+  } catch (error) {
+    // Handle login errors
+    setError({});
+    setCatchError( error.response.data.error)
+  }
+};
 
 
   return (
@@ -54,16 +88,20 @@ function LoginForm() {
         className={styles.input}
         placeholder="Email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        name="email"
+        onChange={(e) =>setEmail(e.target.value)}
       />
+      {error.emailError && <div className={styles.errorMessage}>{error.emailError}</div>} 
       <input
         type="password"
         className={styles.input}
         placeholder="Password"
         value={password}
+        name="password"
         onChange={(e) => setPassword(e.target.value)}
       />
-      {error && <div className={styles.errorMessage}>{error}</div>}  {/*front-end error */}
+      {error.passwordError && <div className={styles.errorMessage}>{error.passwordError}</div>}
+      {catchError && <div className={styles.errorMessage}>{catchError}</div>}  
       <Link to="/forgot-password" className={styles.anchor}>
         Forgot your password?
       </Link>

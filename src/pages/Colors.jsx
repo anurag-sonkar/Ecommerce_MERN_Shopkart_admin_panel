@@ -99,7 +99,10 @@ function Colors() {
   const dataSource = colors.map((color, index) => ({
     key: color._id,
     sno: index + 1,
-    color: color.color,
+    color: <div className="flex gap-4">
+      <div className="w-20 text-left">{color.color}</div>
+      <div className="h-5 w-5 rounded-full text-right" style={{backgroundColor:`${color.color}`}}></div>
+    </div>,
     action: (
       <div className="flex items-center gap-5">
         <Link>

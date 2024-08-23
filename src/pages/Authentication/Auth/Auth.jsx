@@ -2,12 +2,25 @@ import React,{ useState } from "react";
 import styles from "./Auth.module.css";
 import SignupForm from "../Signup/Signup";
 import LoginForm from "../Login/Login";
+import { useSelector } from "react-redux";
+import { Alert, Flex, Spin } from 'antd';
 
 function AuthenticationForm() {
   const [signIn, setSignIn] = useState(true);
+  const {isLoading  ,isError , isSuccess , message} = useSelector(state => state.auth)
+  // const contentStyle = {
+  //   padding: 50,
+  //   background: 'rgba(0, 0, 0, 0.05)',
+  //   borderRadius: 4,
+  // };
+  // const content = <div style={contentStyle} />;
+
 
   return (
     <div className={styles.authContainer}>
+    {
+      isLoading && <Spin tip="Loading..." fullscreen={true} size="large" />
+    }
       <div className={`${styles.container} ${signIn ? "" : styles.rightPanelActive}`}>
         <div className={`${styles.formContainer} ${styles.signUpContainer}`}>
           <SignupForm signIn={signIn} setSignIn={setSignIn}/>

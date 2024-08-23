@@ -101,6 +101,10 @@ function MainLayout() {
     localStorage.setItem("collapsed", newCollapsedState);
   };
 
+  useEffect(()=>{
+
+  } , [user])
+
 
 
   return (
@@ -312,7 +316,7 @@ function MainLayout() {
             borderRadius: borderRadiusLG,
           }}
         >
-          <ToastContainer
+          {/* <ToastContainer
             position="top-right"
             autoClose={5000}
             hideProgressBar={false}
@@ -324,7 +328,8 @@ function MainLayout() {
             pauseOnHover
             theme="dark"
             transition:Bounce
-          />
+          /> */}
+        
           <div className="relative"><Outlet /> {/*content */} </div>
           {isLoading && (
         <div className="absolute top-0 left-0 w-full flex justify-center items-center bg-gray-200 bg-opacity-50 min-h-screen h-full">

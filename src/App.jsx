@@ -45,14 +45,18 @@ function App() {
     // console.log( user, isLoading, isError, isSuccess, message )
     console.log(user)
     if (user) {
-      navigate('/admin');
+      if(pathname === '/'){
+        navigate('/admin')
+        return
+      }
+      navigate(pathname);
     } else {
       navigate("/");
     }
   }, [dispatch,user]);
   return (
     <>
-      {/* <ToastContainer
+      <ToastContainer
             position="top-right"
             autoClose={5000}
             hideProgressBar={false}
@@ -64,7 +68,7 @@ function App() {
             pauseOnHover
             theme="dark"
             transition:Bounce
-          /> */}
+          />
     <Routes>
       <Route path='/' element={<AuthenticationForm />} />
       <Route path='/signup' element={<SignupForm />} />

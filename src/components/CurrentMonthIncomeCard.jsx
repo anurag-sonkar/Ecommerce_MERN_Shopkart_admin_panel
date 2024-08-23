@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GoArrowUpRight } from "react-icons/go";
 import { GoArrowDownRight } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
-import { getMonthWiseOrderStats } from "../features/auth/authSlice";
+import { getMonthWiseOrderStats } from "../features/orders/ordersSlice";
 
 function CardMonthIncomeCard() {
   const dispatch =  useDispatch()
@@ -22,7 +22,7 @@ function CardMonthIncomeCard() {
     "December",
   ];
   
-  const { monthWiseOrderStats } = useSelector((state) => state.auth);
+  const { monthWiseOrderStats } = useSelector((state) => state.orders);
   const [currentMonthData, setCurrentMonthData] = useState(null);
   const [previousMonthData, setPreviousMonthData] = useState(null);
   const [growth, setGrowth] = useState(null);
@@ -68,7 +68,7 @@ function CardMonthIncomeCard() {
       <p className="capitalize font-semibold text-xl text-gray-600">
         Total Income <span className="text-sm text-black">({currentMonthData?.month})</span>
       </p>
-      <div className="grid lg:grid-cols-2 grid-cols-1 grid-rows-2 items-center md:gap-4">
+      <div className="grid grid-cols-2 grid-rows-2 items-center md:gap-4">
         <div className="row-span-2 text-3xl font-semibold mm:text-2xl sms:text-[1.5rem] ">
             ₹{currentMonthData?.amount}
           
