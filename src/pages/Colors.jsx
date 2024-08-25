@@ -13,7 +13,7 @@ function Colors() {
   const { colors, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.colors
   );
-  // console.log({ colors, isLoading, isError, isSuccess, message })
+  console.log({ colors, isLoading, isError, isSuccess, message })
 
   const [updatedColor, setUpdatedColor] = useState("");
   const [updateId, setUpdateId] = useState("");
@@ -52,6 +52,30 @@ function Colors() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const handleDeleteColor = (id)=>{
+    const deletePromise = dispatch(deleteColor(id)).unwrap()
+
+    toast.promise(
+      deletePromise,
+      {
+        pending: "deleting color...",
+        success: "color deleted successfully!",
+        error: "deletion failed!",
+      },
+      {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      }
+    );
+  }
 
   useEffect(() => {
     const uploadPromise = dispatch(getAllColors()).unwrap();
@@ -112,7 +136,7 @@ function Colors() {
           <MdDelete
             size={22}
             color="crimson"
-            onClick={() =>deleteColor(color._id)}
+            onClick={() =>handleDeleteColor(color._id)}
           />
         </Link>
       </div>

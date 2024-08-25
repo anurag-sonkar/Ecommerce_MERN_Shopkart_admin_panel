@@ -69,7 +69,7 @@
 
 .errorMessage {
   color: crimson;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   text-align: left;
   padding: 0 0.8rem;
   margin-top: -0.4rem;
@@ -85,4 +85,14 @@
   border: 2px solid #b6b6b6;
   padding: 2px;
 
+}
+
+@media (max-width : 500px) {
+  .form{
+    padding: 20px 18px;
+    margin: 1.8rem 0.5rem;
+    border-radius: 14px;
+    box-shadow: 2px 2px 20px #ccc;
+  }
+  
 }

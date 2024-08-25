@@ -5,6 +5,7 @@ import { getConfig } from "../../utils/config";
 
 const getAllProductsCategory = async () => {
   const response = await axios.get(`${product_category_base_url}/`);
+  console.log(response)
   return response.data;
 };
 

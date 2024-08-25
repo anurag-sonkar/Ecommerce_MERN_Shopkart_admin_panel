@@ -38,7 +38,6 @@ function BlogsCategory() {
       fetchPromise,
       {
         pending: 'Fetching... category',
-        // success: 'Upload successfull!',
         error: `Fetching failed!`
       },
       {

@@ -108,6 +108,12 @@
   display: none;
 }
 
+/* single product page*/
+.tiles{
+  border-bottom: 1px solid #e1e1e1;
+  padding: 1rem 0;
+  width: 100%;
+}
 .lg-logo {
 }
 

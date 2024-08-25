@@ -40,17 +40,18 @@ function SignupForm({ setSignIn }) {
   const navigate = useNavigate();
   const { user, registerState, isLoading, isError, isSuccess, message } =
     useSelector((state) => state.auth);
+    console.log(registerState)
 
   // Function to validate form fields
   const validateForm = () => {
     const newErrors = {};
     if (!name) {
       newErrors.nameError = "name is required";
-    } else if (!email) {
+    } if (!email) {
       newErrors.emailError = "email is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    }  if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.emailError = "enter a valid email";
-    } else if (!password) {
+    }  if (!password) {
       newErrors.passwordError = "Password is required";
     } else if (!confirmPassword) {
       newErrors.confirmPasswordError = "Confirm your password";
@@ -141,7 +142,7 @@ function SignupForm({ setSignIn }) {
       formData.append("photo", image);
     }
 
-    if(catchError) return
+    // if(catchError) return
   
     const registerPromise = dispatch(register(formData)).unwrap();
   
@@ -247,15 +248,15 @@ function SignupForm({ setSignIn }) {
        {error.confirmPasswordError && (
         <div className={styles.errorMessage}>{error.confirmPasswordError}</div>
       )}
-      {catchError && (
-      <div className={styles.errorMessage} style={{padding:"2px 6px" , fontSize:"10px , "}}>{catchError}</div> // Ensure catchError is displayed here
-    )}
+      
       <input
         type="file"
         className={styles.input}
         onChange={handleImageChange}
       />
-      {/* {error && <div className={styles.errorMessage}>{error}</div>} */}
+      {catchError && (
+      <div className={styles.errorMessage} style={{padding:"2px 6px" , fontSize:"10px , "}}>{catchError}</div> // Ensure catchError is displayed here
+    )}
       <button type="button" className={styles.button} onClick={handleSignup}>
         Sign Up
       </button>

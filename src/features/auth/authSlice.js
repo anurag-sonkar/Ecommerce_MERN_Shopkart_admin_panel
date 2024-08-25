@@ -55,7 +55,6 @@ export const resetPassword = createAsyncThunk(
   "auth/resetPassword",
   async (data, thunkAPI) => {
     try {
-      console.log(data);
       return await authService.resetPassword(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -126,19 +125,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         // state.user = null
-        if (state.isSuccess) {
-          toast.success("password reset link send successfully to your email", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: Bounce,
-          });
-        }
+        
       })
       .addCase(forgotPassword.rejected, (state, action) => {
         state.isLoading = false;
@@ -154,19 +141,6 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         // state.user = null
-        if (state.isSuccess) {
-          toast.success("password reset successfully Login now", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: Bounce,
-          });
-        }
       })
       .addCase(resetPassword.rejected, (state, action) => {
         state.isLoading = false;

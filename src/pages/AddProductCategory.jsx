@@ -43,7 +43,7 @@ function AddProductCategory() {
 
     uploadPromise.then(()=>{
       setTimeout(() => {
-        navigate('/admin/brands')
+        navigate('/admin/products-category-list')
       }, 2500);
     })
   };

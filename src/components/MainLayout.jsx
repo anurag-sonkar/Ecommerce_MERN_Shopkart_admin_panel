@@ -39,8 +39,26 @@ import { signOut } from "../features/auth/authSlice";
 import { toast, Bounce } from "react-toastify";
 import Loader from "../components/Loader";
 
+const useScreenSize = () => {
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return isLargeScreen;
+};
+
 function MainLayout() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(useScreenSize() ? false : true);
   const [selectedKey, setSelectedKey] = useState("dashboard");
   const dispatch = useDispatch();
   const {user,isLoading} = useSelector(state=>state.auth)
@@ -101,9 +119,9 @@ function MainLayout() {
     localStorage.setItem("collapsed", newCollapsedState);
   };
 
-  useEffect(()=>{
+  // useEffect(()=>{
 
-  } , [user])
+  // } , [user])
 
 
 
@@ -280,7 +298,7 @@ function MainLayout() {
                   <img
                     alt=""
                     src={profile}
-                    className="h-12 w-12 rounded-full object-cover"
+                    className="h-12 w-12 rounded-full object-contain border-2 border-blue-200"
                   />
                 </TailwindMenuButton>
               </div>
@@ -293,7 +311,7 @@ function MainLayout() {
                     to="/admin/profile"
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                   >
-                    My MyAccount
+                    My Account
                   </Link>
                 </TailwindMenuItem>
                 <TailwindMenuItem>

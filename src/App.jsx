@@ -26,34 +26,63 @@ import Orders from './pages/Orders'
 import AddCoupon from './pages/AddCoupon'
 import Coupons from './pages/Coupons'
 import ViewProduct from './pages/ViewProduct'
-import { useDispatch, useSelector } from 'react-redux'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { toast, Bounce } from "react-toastify";
-import Profile from './pages/MyAccount'
 import MyAccount from './pages/MyAccount'
+import ProtectedRoutes from './pages/routing/ProtectedRoutes'
 
-function App() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const {pathname} = useLocation()
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+const useDesktopViewportForAdmin = () => {
+  const location = useLocation();
 
   useEffect(() => {
-    // console.log( user, isLoading, isError, isSuccess, message )
-    console.log(user)
-    if (user) {
-      if(pathname === '/'){
-        navigate('/admin')
-        return
+    const adminPaths = [
+      '/admin',
+      '/admin/enquires',
+      '/admin/add-blog',
+      '/admin/add-blog-category',
+      '/admin/add-product-category',
+      '/admin/add-brand',
+      '/admin/add-color',
+      '/admin/add-product',
+      '/admin/products',
+      '/admin/product/view',
+      '/admin/profile',
+      '/admin/customers',
+      '/admin/brands',
+      '/admin/products-category-list',
+      '/admin/blogs-category-list',
+      '/admin/color-list',
+      '/admin/orders',
+      '/admin/add-coupon',
+      '/admin/coupons-list',
+    ];
+
+    const isAdminRoute = adminPaths.some((path) => location.pathname.startsWith(path));
+
+    if (isAdminRoute) {
+      // Set viewport for desktop
+      const metaViewport = document.querySelector('meta[name="viewport"]');
+      if (metaViewport) {
+        metaViewport.setAttribute('content', 'width=1024');
+      } else {
+        const meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=1024';
+        document.head.appendChild(meta);
       }
-      navigate(pathname);
     } else {
-      navigate("/");
+      // Reset viewport to default
+      const metaViewport = document.querySelector('meta[name="viewport"]');
+      if (metaViewport) {
+        metaViewport.setAttribute('content', 'width=device-width, initial-scale=1');
+      }
     }
-  }, [dispatch,user]);
+  }, [location]);
+};
+
+
+function App() {
+  useDesktopViewportForAdmin() // always on desktop mode when on mobile browser
   return (
     <>
       <ToastContainer
@@ -74,10 +103,10 @@ function App() {
       <Route path='/signup' element={<SignupForm />} />
       <Route path='/login' element={<LoginForm />} />
 
-      <Route path='/reset-password' element={<ResetPassword />} />
+      <Route path='/reset-password/:token' element={<ResetPassword />} />
       <Route path='/forgot-password' element={<ForgotPassword />} />
 
-      <Route path='/admin' element={<MainLayout />}>
+      <Route path='/admin' element={<ProtectedRoutes><MainLayout /></ProtectedRoutes>}>
         <Route index element={<Dashboard/>} />
         <Route path='enquires' element={<Enquires/>} />
         <Route path='add-blog' element={<AddBlog/>} />

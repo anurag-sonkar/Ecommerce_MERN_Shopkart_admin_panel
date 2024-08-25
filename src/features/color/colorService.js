@@ -9,13 +9,13 @@ const getAllColors = async () => {
 };
 
 const createColor = async (color) => {
-    console.log("color:",color)
     const response = await axios.post(`${color_base_url}/`, {color:color}, getConfig());
     return response.data;
   };
   
   const deleteColor = async (id) => {
     const response = await axios.delete(`${color_base_url}/${id}`, getConfig());
+    console.log(response)
   return response.data;
 };
 

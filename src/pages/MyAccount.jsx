@@ -49,7 +49,7 @@ function MyAccount() {
   }
 
   return (
-    <div className="px-10 py-5 grid grid-col--12 grid-flow-col gap-4  bg-gray-100 min-h-screen">
+    <div className="grid grid-col--12 grid-flow-col gap-4  bg-gray-100">
       {/* first col */}
       <div className="rounded-sm grid gap-3 h-fit">
         {/* first col - first row */}

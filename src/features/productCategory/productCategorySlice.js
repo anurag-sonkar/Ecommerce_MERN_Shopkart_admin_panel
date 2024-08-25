@@ -85,8 +85,8 @@ const productCategory = createSlice({
       .addCase(getAllProductsCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.message = action.payload.message;
         state.productsCategory = action.payload.response;
+        state.message = action.payload.message;
       })
       .addCase(getAllProductsCategory.rejected, (state, action) => {
         state.isLoading = false;
