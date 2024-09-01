@@ -73,7 +73,7 @@ function MyAccount() {
             className="grid grid-flow-col items-center py-2 border-b-2"
           >
             <div className="flex gap-5">
-              <img src="../../public/assets/order.svg" />
+              <img src="/assets/order.svg" />
               <div className="uppercase text-gray-600 font-semibold text-left cursor-pointer hover:text-[#2874F0] transition-all ease-in-out">
                 my orders
               </div>
@@ -86,7 +86,7 @@ function MyAccount() {
           {/* Account settings */}
           <div className=" py-2 border-b-2">
             <div className="flex gap-5 py-2">
-              <img src="../../public/assets/order-user.svg" />
+              <img src="/assets/order-user.svg" />
               <div className="uppercase text-gray-600 font-semibold text-left cursor-pointer hover:text-[#2874F0] transition-all ease-in-out">
                 account settings
               </div>

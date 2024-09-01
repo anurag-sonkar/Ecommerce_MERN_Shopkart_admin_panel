@@ -8,7 +8,7 @@ import { FaPhone } from "react-icons/fa";
 function Profile() {
   const { user } = useSelector((state) => state.auth);
   const [profile, setProfile] = useState(
-    user?.imgpath?.url || "../../public/assets/profile-fallback.svg"
+    user?.imgpath?.url || "/assets/profile-fallback.svg"
   );
   
   const [isDisabled, setIsDisabled] = useState(true); // State to control the disabled state

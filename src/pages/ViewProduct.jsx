@@ -5,7 +5,7 @@ import { getProduct } from "../features/products/productSlice";
 import { ProductCarousal } from "../components/ProductCarousal";
 import RatingMUI from "../components/RatingMUI";
 import { Rating, Progress } from "@material-tailwind/react";
-import payment from "../../public/assets/pay.png"
+import payment from "/assets/pay.png"
 function ViewProduct() {
   const { id } = useParams();
   const dispatch = useDispatch();

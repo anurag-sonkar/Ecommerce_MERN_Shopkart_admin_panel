@@ -61,7 +61,7 @@ function MainLayout() {
   const [selectedKey, setSelectedKey] = useState("dashboard");
   const dispatch = useDispatch();
   const {user,isLoading} = useSelector(state=>state.auth)
-  const [profile , setProfile] = useState( user?.imgpath?.url || '../../public/assets/profile.png')
+  const [profile , setProfile] = useState( user?.imgpath?.url || '/assets/profile.png')
 
   const handleSignOut =  (e)=>{
     e.preventDefault();
@@ -127,9 +127,9 @@ function MainLayout() {
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="logo roboto-bold ">
-          <span className="sm-logo">MD</span>
-          <span className="lg-logo">Mern Dev </span>
+        <div className="logo roboto-bold">
+          <span className="sm-logo text-blue-50">SK</span>
+          <span className="lg-logo table mx-auto"><img src="/assets/logo.png" className=" w-36 h-auto" /></span>
         </div>
         <Menu
           theme="dark"
