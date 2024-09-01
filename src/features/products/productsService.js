@@ -4,7 +4,8 @@ import { getConfig } from "../../utils/config";
 // import { config } from "../../utils/config";
 
 const getAllProducts = async () => {
-  const response = await axios.get(`${products_base_url}/`, getConfig());
+  const response = await axios.get(`${products_base_url}/?sortBy=createdAt&sortOrder=desc
+`, getConfig());
   return response.data;
 };
 

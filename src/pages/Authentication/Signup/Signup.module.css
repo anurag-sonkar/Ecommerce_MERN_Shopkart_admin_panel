@@ -72,15 +72,15 @@
   font-size: 0.6rem;
   text-align: left;
   padding: 0 0.8rem;
-  margin-top: -0.4rem;
+  margin-top: -0.3rem;
   width: 100%;
   /* margin: 0.2rem 0; */
 }
 
 .profile img{
   border-radius: 50%;
-  width: 7rem;
-  height: 7rem;
+  width: 6rem;
+  height: 6rem;
   object-fit: cover;
   border: 2px solid #b6b6b6;
   padding: 2px;

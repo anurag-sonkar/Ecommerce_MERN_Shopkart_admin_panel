@@ -56,10 +56,6 @@ function SignupForm({ setSignIn }) {
     } else if (!confirmPassword) {
       newErrors.confirmPasswordError = "Confirm your password";
     }
-    // else if(password !== confirmPassword){
-    //   newErrors.passwordMatchError = "password and confirm password is not matched"
-    // }
-    // console.log(newErrors)
     return newErrors;
   };
 

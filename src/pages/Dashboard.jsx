@@ -19,6 +19,8 @@ import {
   getMonthWiseOrderStats,
   updateOrders,
 } from "../features/orders/ordersSlice";
+import { Skeleton} from 'antd';
+
 
 function Dashboard() {
   const [orderStateFirst, setOrderStateFirst] = useState("Ordered");
@@ -39,7 +41,7 @@ function Dashboard() {
     "December",
   ];
   const dispatch = useDispatch();
-  const { orders, monthWiseOrderStats, isError, isSuccess, message } =
+  const { orders, isLoading ,  monthWiseOrderStats, isError, isSuccess, message } =
     useSelector((state) => state.orders);
 
   console.log(monthWiseOrderStats);
@@ -479,7 +481,8 @@ function Dashboard() {
         <main className="roboto-regular w-full">
           <h1 className="text-4xl font-bold my-4">Dashboard</h1>
           {/* grid container - cards*/}
-          <section className="grid lg:grid-cols-3 md:grid-cols-1 gap-3">
+          {
+            orders.length > 0 ? <section className="grid lg:grid-cols-3 md:grid-cols-1 gap-3">
             <div className="max-w-[19rem]" ref={ref1}>
               <CurrentYearIncomeRevenueCard />
             </div>
@@ -489,7 +492,11 @@ function Dashboard() {
             <div className="max-w-[19rem]" ref={ref3}>
               <CardMonthSalesCard />
             </div>
-          </section>
+          </section> : <div className="flex flex-col justify-center items-center gap-4">
+          <img  src="../src/assets/empty.png"/>
+          <p className="text-gray-600">No orders</p>
+          </div>
+          }
 
           {/* sales stats */}
           <section className="mt-8 grid grid-cols-2">
@@ -554,11 +561,12 @@ function Dashboard() {
                 <span ref={ref6}>Income Statics</span>
               </h1>
 
-              <ResponsiveContainer width="100%" height={400}>
+              {
+                !isLoading ? <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={incomeData}>
                   <XAxis dataKey="month" />
                   <YAxis />
-                  {incomeData.map((data, index) => (
+                  {incomeData?.map((data, index) => (
                     <ReferenceLine
                       key={index}
                       y={data.income}
@@ -570,7 +578,8 @@ function Dashboard() {
                   <Tooltip />
                   <Bar dataKey="income" fill={dashboardThemeState.barColor} />
                 </BarChart>
-              </ResponsiveContainer>
+              </ResponsiveContainer> : <Skeleton.Input active="true" block="false" style={{width:"100vw" , height:"50vh"}}/>
+              }
             </div>
 
             <div className={`col-span-${dashboardThemeState.gridCount}`}>
@@ -578,7 +587,8 @@ function Dashboard() {
                 <span ref={ref7}>Sales Statics</span>
               </h1>
 
-              <ResponsiveContainer width="100%" height={400}>
+             {
+              !isLoading ?  <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={salesData}>
                   <XAxis dataKey="month" />
                   <YAxis />
@@ -594,7 +604,8 @@ function Dashboard() {
                   <Tooltip />
                   <Bar dataKey="sales" fill={dashboardThemeState.barColor} />
                 </BarChart>
-              </ResponsiveContainer>
+              </ResponsiveContainer> : <Skeleton.Input active="true" block="false" style={{width:"100vw" , height:"50vh"}}/>
+             }
             </div>
           </section>
 

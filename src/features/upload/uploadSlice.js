@@ -12,6 +12,7 @@ const initialState = {
 export const uploadImages = createAsyncThunk(
   "uploads/uploadImage",
   async (data, thunkAPI) => {
+    console.log(data)
     try {
         const formData = new FormData()
         for(let i=0 ; i< data.length ; i++){

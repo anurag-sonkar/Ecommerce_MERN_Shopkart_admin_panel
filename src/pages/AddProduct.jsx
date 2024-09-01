@@ -31,9 +31,9 @@ function AddProduct({ placeholder }) {
   const [category, setCategory] = useState("");
   const [color, setColor] = useState([]);
   const [tags, setTags] = useState([]);
+  const [images , setImages] = useState([])
+  const [error, setError] = useState({}); // error handle
 
-  // console.log(title, description, price, quantity, brand, category, color);
-  
   const dispatch = useDispatch();
   const navigate = useNavigate()
   
@@ -44,8 +44,64 @@ function AddProduct({ placeholder }) {
     (state) => state.imageUpload
   );
   
-  const [images , setImages] = useState([])
-  // console.log({ images, isLoading, isError, isSuccess, message });
+  // const handleFormChange = (e)=>{
+  //   e.preventDefault()
+  //   const {name} = e.target.name
+  //   const {value} = e.target.value
+
+  //   console.log(name  , value)
+
+
+  // }
+
+  // Function to validate form fields
+ const validateForm = () => {
+  const newErrors = {};
+  if(!title){
+    newErrors.titleError = "title is required" 
+  }
+  if(!description){
+    newErrors.descriptionError = "description is required" 
+  }
+  if(!price){
+    newErrors.priceError = "price is required" 
+  }
+  if(!quantity){
+    newErrors.quantityError = "quantity is required if not selected then your product will be out of stock when listed" 
+  }
+  if(!images.length){ 
+    newErrors.imagesError = "At least one image is required"; 
+  }
+  
+
+  return newErrors;
+};
+
+// Apply border styles based on error states
+useEffect(() => {
+  const titleField = document.querySelector('input[name="title"]');
+  const descriptionField = document.querySelector('input[name="description"]');
+  const priceField = document.querySelector('input[name="price"]');
+  const quantityField = document.querySelector('input[name="quantity"]');
+  const imagesField = document.querySelector('input[name="images"]');
+ 
+  if (titleField) {
+    titleField.style.border = error.titleError ? '2px solid crimson' : '';
+  }
+  if (descriptionField) {
+    descriptionField.style.border = error.descriptionError ? '2px solid crimson' : '';
+  }
+  if (priceField) {
+    priceField.style.border = error.priceError ? '2px solid crimson' : '';
+  }
+  if (quantityField) {
+    quantityField.style.border = error.quantityError ? '2px solid crimson' : '';
+  }
+  if (imagesField) {
+    imagesField.style.border = error.imagesError ? '2px solid crimson' : '';
+  }
+}, [error]);
+
 
   useEffect(
     ()=>{
@@ -79,6 +135,17 @@ function AddProduct({ placeholder }) {
   };
 
   const handleAddProduct = () => {
+    const newErrors = validateForm();
+    // console.log(newErrors)
+  if (Object.keys(newErrors).length > 0) {
+    setError(newErrors);
+    return;
+  }
+
+  // first reverse the images array
+  const reversedImages = [...images].reverse();
+
+
     const uploadPromise =  dispatch(
       createProduct({
         title,
@@ -89,7 +156,7 @@ function AddProduct({ placeholder }) {
         category,
         color,
         tags,
-        images
+        images : reversedImages
       })
     ).unwrap();
 
@@ -173,17 +240,21 @@ function AddProduct({ placeholder }) {
   // tags option
   const options = [
     {
-      label: 'popular',
+      label: 'Popular',
       value: 'popular',
     },
     {
-      label: 'featured',
+      label: 'Featured',
       value: 'featured',
     },
     {
-      label: 'special',
+      label: 'Special',
       value: 'special',
     },
+    {
+      label: 'Sale',
+      value: 'sale',
+    }
     
   ];
   return (
@@ -195,27 +266,55 @@ function AddProduct({ placeholder }) {
             label="Enter Product Title"
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+    setTitle(e.target.value);
+    if (error.titleError) {
+      setError((prevError) => ({ ...prevError, titleError: "" }));
+    }
+  }}
+            name="title"
           />
+          {error.titleError && <div className="formErrorMessage">{error.titleError}</div>} 
           <JoditEditor
             ref={editor}
             value={description}
             config={config}
             tabIndex={1} // tabIndex of textarea
-            onChange={(value) => setDescription(value)}
+            onChange={(value) => {
+              setDescription(value);
+    if (error.descriptionError) {
+      setError((prevError) => ({ ...prevError, descriptionError: "" }));
+    }
+  }}
+            name='description'
           />
+          {error.descriptionError && <div className="formErrorMessage">{error.descriptionError}</div>} 
           <Input
             label="Enter Product Price"
             type="number"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => {
+              setPrice(e.target.value);
+    if (error.priceError) {
+      setError((prevError) => ({ ...prevError, priceError: "" }));
+    }
+  }}
+            name="price"
           />
+          {error.priceError && <div className="formErrorMessage">{error.priceError}</div>} 
           <Input
             label="Enter Product Quantity"
             type="number"
             value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={(e) => {
+              setQuantity(e.target.value);
+    if (error.quantityError) {
+      setError((prevError) => ({ ...prevError, quantityError: "" }));
+    }
+  }}           
+            name="quantity"
           />
+          {error.quantityError && <div className="formErrorMessage">{error.quantityError}</div>} 
 
           {/* brand */}
           <div className="w-full">
@@ -297,7 +396,7 @@ function AddProduct({ placeholder }) {
           {/* upload */}
           <div className="w-full border-2 border-gray-400 text-gray-600 border-dashed min-h-32 flex justify-center items-center cursor-pointer text-2xl">
             <div {...getRootProps()}>
-              <input {...getInputProps()} />
+              <input {...getInputProps()} name="image"/>
               {isDragActive ? (
                 <p>Drop the files here ...</p>
               ) : (
@@ -305,6 +404,7 @@ function AddProduct({ placeholder }) {
               )}
             </div>
           </div>
+              {error.imagesError && <div className="formErrorMessage">{error.imagesError}</div>} 
 
           {/* upload preview */}
           <div className="relative flex gap-5 flex-wrap">

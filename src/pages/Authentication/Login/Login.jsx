@@ -34,7 +34,7 @@ function LoginForm() {
 useEffect(() => {
   const emailField = document.querySelector('input[name="email"]');
   const passwordField = document.querySelector('input[name="password"]');
-
+ 
   if (emailField) {
     emailField.style.border = error.emailError ? '2px solid crimson' : '';
   }

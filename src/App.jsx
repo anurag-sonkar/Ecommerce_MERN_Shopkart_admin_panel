@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import AuthenticationForm from './pages/Authentication/Auth/Auth'
 
@@ -30,6 +30,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MyAccount from './pages/MyAccount'
 import ProtectedRoutes from './pages/routing/ProtectedRoutes'
+import { useSelector } from 'react-redux'
+import { Button } from 'antd';
 
 const useDesktopViewportForAdmin = () => {
   const location = useLocation();
@@ -83,56 +85,109 @@ const useDesktopViewportForAdmin = () => {
 
 function App() {
   useDesktopViewportForAdmin() // always on desktop mode when on mobile browser
-  return (
-    <>
-      <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark"
-            transition:Bounce
-          />
-    <Routes>
-      <Route path='/' element={<AuthenticationForm />} />
-      <Route path='/signup' element={<SignupForm />} />
-      <Route path='/login' element={<LoginForm />} />
+  const {pathname} = useLocation()
+  const {user} = useSelector(state=>state.auth)
+  const navigate = useNavigate()
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  useEffect(
+    ()=>{
+      if(user){
+        if(pathname === '/'){
+          navigate('/admin')
+        }
+        else{
+          navigate(pathname)
+        }
+        
+      }else{
+        navigate('/')
 
-      <Route path='/reset-password/:token' element={<ResetPassword />} />
-      <Route path='/forgot-password' element={<ForgotPassword />} />
-
-      <Route path='/admin' element={<ProtectedRoutes><MainLayout /></ProtectedRoutes>}>
-        <Route index element={<Dashboard/>} />
-        <Route path='enquires' element={<Enquires/>} />
-        <Route path='add-blog' element={<AddBlog/>} />
-        <Route path='add-blog-category' element={<AddBlogCategory/>} />
-        <Route path='add-product-category' element={<AddProductCategory/>} />
-        <Route path='add-brand' element={<AddBrand/>} />
-        <Route path='add-color' element={<AddColor/>} />
-        <Route path='add-product' element={<AddProduct/>} />
-        <Route path='products' element={<Products/>} />
-        <Route path='/admin/product/view/:id' element={<ViewProduct/>} />
-        <Route path='/admin/profile' element={<MyAccount/>} />
-        <Route path='customers' element={<Customers/>} />
-        <Route path='brands' element={<Brands/>} />
-        <Route path='products-category-list' element={<ProductsCategory/>} />
-        <Route path='blogs-category-list' element={<BlogsCategory/>} />
-        <Route path='color-list' element={<Colors/>} />
-        <Route path='orders' element={<Orders/>} />
-        <Route path='add-coupon' element={<AddCoupon/>} />
-        <Route path='coupons-list' element={<Coupons/>} />
-
-
-      </Route>
-      <Route path='*' element={<Error/>} />
-    </Routes>
-    </>
+      }
+    },[user]
   )
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    // Cleanup the event listeners on component unmount
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  if(isOnline){
+    return (
+      <>
+        <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+              transition:Bounce
+            />
+      <Routes>
+        <Route path='/' element={<AuthenticationForm />} />
+        <Route path='/signup' element={<SignupForm />} />
+        <Route path='/login' element={<LoginForm />} />
+  
+        <Route path='/reset-password/:token' element={<ResetPassword />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+  
+        <Route path='/admin' element={<ProtectedRoutes><MainLayout /></ProtectedRoutes>}>
+          <Route index element={<Dashboard/>} />
+          <Route path='enquires' element={<Enquires/>} />
+          <Route path='add-blog' element={<AddBlog/>} />
+          <Route path='add-blog-category' element={<AddBlogCategory/>} />
+          <Route path='add-product-category' element={<AddProductCategory/>} />
+          <Route path='add-brand' element={<AddBrand/>} />
+          <Route path='add-color' element={<AddColor/>} />
+          <Route path='add-product' element={<AddProduct/>} />
+          <Route path='products' element={<Products/>} />
+          <Route path='/admin/product/view/:id' element={<ViewProduct/>} />
+          <Route path='/admin/profile' element={<MyAccount/>} />
+          <Route path='customers' element={<Customers/>} />
+          <Route path='brands' element={<Brands/>} />
+          <Route path='products-category-list' element={<ProductsCategory/>} />
+          <Route path='blogs-category-list' element={<BlogsCategory/>} />
+          <Route path='color-list' element={<Colors/>} />
+          <Route path='orders' element={<Orders/>} />
+          <Route path='add-coupon' element={<AddCoupon/>} />
+          <Route path='coupons-list' element={<Coupons/>} />
+  
+  
+        </Route>
+        <Route path='*' element={<Error/>} />
+      </Routes>
+      </>
+    )
+    
+  }
+
+
+  else{
+    return (
+        <div className="w-full h-[100vh] flex justify-center items-center bg-white">
+            <div className="flex flex-col justify-center items-center gap-4">
+              <img src="../src/assets/offline.png" className="object-contain w-64 h-auto"/>
+              <p className="text-lg font-medium">You appear to be offline</p>
+              <p className="text-xs text-gray-500">You can't use Shopkart until you're connected to the internet</p>
+              <Button type="primary" onClick={()=>window.location.reload()} className="min-w-24">Retry</Button>
+            </div>
+        </div>
+    )
+  }
+
 }
 
 export default App

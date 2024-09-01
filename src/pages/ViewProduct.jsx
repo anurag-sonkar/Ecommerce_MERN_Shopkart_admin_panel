@@ -140,24 +140,7 @@ function ViewProduct() {
           <section className="lg:mx-10 md:mx-4 sm:mx-2 mt-6">
             <h1 className="font-semibold text-2xl my-2">Description</h1>
             <div className="bg-white rounded-md p-5 text-sm text-justify grid gap-5">
-              <p dangerouslySetInnerHTML={{ __html: product.description }} />
-              <p>
-                Waiting and watching. It was all she had done for the past
-                weeks. When you’re locked in a room with nothing but food and
-                drink, that’s about all you can do anyway. She watched as birds
-                flew past the window bolted shut. She couldn’t reach it if she
-                wanted too, with that hole in the floor. She thought she could
-                escape through it but three stories is a bit far down. He read
-                about a hike called the incline in the guidebook. It said it was
-                a strenuous hike and to bring plenty of water. “A beautiful hike
-                to the clouds” described one review. “Not for the
-                faint-hearted,” said another. “Not too bad of a workout”,
-                bragged a third review. I thought I’d hike it when I fly in from
-                Maryland on my day off from the senior citizen's wellness
-                conference. I hiked 2 miles a day around the neighborhood so I
-                could handle a 1.1-mile hike. What a foolish mistake that was
-                for a 70-year-old low-lander.
-              </p>
+              <p className="overflow-x-auto" dangerouslySetInnerHTML={{ __html: product.description }} />
             </div>
           </section>
         ) : (

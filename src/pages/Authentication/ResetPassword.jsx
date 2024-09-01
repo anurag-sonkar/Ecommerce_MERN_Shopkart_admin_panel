@@ -26,7 +26,7 @@ function ResetPassword() {
       setCpassword(e.target.value)
     }
   }
-
+ 
   const validateForm = () => {
     const newErrors = {};
   
