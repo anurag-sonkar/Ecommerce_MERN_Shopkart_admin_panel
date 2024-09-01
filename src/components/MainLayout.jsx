@@ -22,7 +22,6 @@ import { BiLogoBlogger } from "react-icons/bi";
 import { RiCoupon3Line } from "react-icons/ri";
 import { SiGooglemarketingplatform } from "react-icons/si";
 
-import logo from "../assets/logo.svg";
 import { Outlet, Link } from "react-router-dom";
 
 import { ToastContainer } from "react-toastify";
@@ -62,7 +61,7 @@ function MainLayout() {
   const [selectedKey, setSelectedKey] = useState("dashboard");
   const dispatch = useDispatch();
   const {user,isLoading} = useSelector(state=>state.auth)
-  const [profile , setProfile] = useState( user?.imgpath?.url || '../src/assets/profile.png')
+  const [profile , setProfile] = useState( user?.imgpath?.url || '../../public/assets/profile.png')
 
   const handleSignOut =  (e)=>{
     e.preventDefault();

@@ -384,7 +384,7 @@ function Dashboard() {
       cover: (
         <img
           alt="tour.png"
-          src="../src/assets/growth-2.png"
+          src="../../public/assets/growth-2.png"
           className="w-24 h-24 object-contain"
         />
       ),
@@ -396,7 +396,7 @@ function Dashboard() {
       cover: (
         <img
           alt="tour.png"
-          src="../src/assets/growth-1.png"
+          src="../../public/assets/growth-1.png"
           className="w-24 h-24 object-contain"
         />
       ),
@@ -408,7 +408,7 @@ function Dashboard() {
       cover: (
         <img
           alt="tour.png"
-          src="../src/assets/hori-grid.png"
+          src="../../public/assets/hori-grid.png"
           className="w-24 h-24 object-contain"
         />
       ),
@@ -420,7 +420,7 @@ function Dashboard() {
       cover: (
         <img
           alt="tour.png"
-          src="../src/assets/veri-grid.png"
+          src="../../public/assets/veri-grid.png"
           className="w-24 h-24 object-contain"
         />
       ),
@@ -432,7 +432,7 @@ function Dashboard() {
       cover: (
         <img
           alt="tour.png"
-          src="../src/assets/sales.png"
+          src="../../public/assets/sales.png"
           className="w-24 h-24 object-contain"
         />
       ),
@@ -444,7 +444,7 @@ function Dashboard() {
       cover: (
         <img
           alt="tour.png"
-          src="../src/assets/bargraph.png"
+          src="../../public/assets/bargraph.png"
           className="w-28 h-28 object-contain"
         />
       ),
@@ -493,7 +493,7 @@ function Dashboard() {
               <CardMonthSalesCard />
             </div>
           </section> : <div className="flex flex-col justify-center items-center gap-4">
-          <img  src="../src/assets/empty.png"/>
+          <img  src="../../public/assets/empty.png"/>
           <p className="text-gray-600">No orders</p>
           </div>
           }
@@ -528,7 +528,7 @@ function Dashboard() {
                 className="step4-button"
               >
                 <img
-                  src="../src/assets/horizontal-tile.png"
+                  src="../../public/assets/horizontal-tile.png"
                   className="w-8 h-8 border-2 rounded-md cursor-pointer px-1 py-1"
                   style={{
                     border:
@@ -544,7 +544,7 @@ function Dashboard() {
                 className="step5-button"
               >
                 <img
-                  src="../src/assets/vertical-tile.png"
+                  src="../../public/assets/vertical-tile.png"
                   className="w-8 h-8 border-2 rounded-md cursor-pointer px-1 py-1"
                   style={{
                     border:

@@ -4,10 +4,8 @@ import { useParams } from "react-router-dom";
 import { getProduct } from "../features/products/productSlice";
 import { ProductCarousal } from "../components/ProductCarousal";
 import RatingMUI from "../components/RatingMUI";
-import pay from "../assets/pay.png";
-import profileFallback from "../assets/profile-fallback.svg";
 import { Rating, Progress } from "@material-tailwind/react";
-
+import payment from "../../public/assets/pay.png"
 function ViewProduct() {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -129,7 +127,7 @@ function ViewProduct() {
 
             <div className="py-[1rem] grid place-items-center gap-4">
               <h1 className=" font-semibold capitalize">payment methods</h1>
-              <img src={pay} />
+              <img src={payment} />
             </div>
           </div>
         </div>
@@ -165,7 +163,7 @@ function ViewProduct() {
                   className="rounded-lg p-[1px]"
                 >
                   <img
-                    src={ele?.postedby?.imgpath?.url || profileFallback}
+                    src={ele?.postedby?.imgpath?.url || "../public/assets/profile-fallback.svg"}
                     className="w-12 h-12 rounded-lg object-cover"
                   />
                 </div>

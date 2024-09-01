@@ -106,7 +106,7 @@ function Customers() {
     name: customer?.name,
     email: customer?.email,
     mobile: customer?.mobile,
-    profile : <img src={customer?.imgpath?.url || "../src/assets/profile.png"} className="w-9 h-9 rounded-full object-cover border-2 border-blue-100 p-[0.5px]" />,
+    profile : <img src={customer?.imgpath?.url || "../../public/assets/profile.png"} className="w-9 h-9 rounded-full object-cover border-2 border-blue-100 p-[0.5px]" />,
     statusValue : customer?.isBlocked ? "Blocked" : "Unblocked" 
   }));
   
