@@ -179,7 +179,7 @@ function App() {
     return (
         <div className="w-full h-[100vh] flex justify-center items-center bg-white">
             <div className="flex flex-col justify-center items-center gap-4">
-              <img src="../src/assets/offline.png" className="object-contain w-64 h-auto"/>
+              <img src="/assets/offline.png" className="object-contain w-64 h-auto"/>
               <p className="text-lg font-medium">You appear to be offline</p>
               <p className="text-xs text-gray-500">You can't use Shopkart until you're connected to the internet</p>
               <Button type="primary" onClick={()=>window.location.reload()} className="min-w-24">Retry</Button>
