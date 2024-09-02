@@ -40,7 +40,7 @@ function SignupForm({ setSignIn }) {
   const navigate = useNavigate();
   const { user, registerState, isLoading, isError, isSuccess, message } =
     useSelector((state) => state.auth);
-    console.log(registerState)
+    // console.log(registerState)
 
   // Function to validate form fields
   const validateForm = () => {
@@ -185,7 +185,7 @@ function SignupForm({ setSignIn }) {
         );
       })
       .catch((error) => {
-        console.error("Caught error:", error); 
+        // console.error("Caught error:", error); 
         setCatchError(error.response.data.error || "An unexpected error occurred");
       });
   };

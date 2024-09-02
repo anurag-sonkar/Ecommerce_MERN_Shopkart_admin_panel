@@ -89,6 +89,8 @@ function App() {
   const {user} = useSelector(state=>state.auth)
   const navigate = useNavigate()
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [imageSrc, setImageSrc] = useState(null);
+
   useEffect(
     ()=>{
       if(user){
@@ -108,8 +110,9 @@ function App() {
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
+    const handleOffline = () =>setIsOnline(false);
 
+    
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
@@ -120,6 +123,18 @@ function App() {
     };
   }, []);
 
+
+  useEffect(
+    ()=>{
+      const savedImage = localStorage.getItem("offline-image");
+        if (savedImage) {
+          setImageSrc(savedImage);
+        }
+
+    }
+    ,[isOnline]
+  )
+  
   if(isOnline){
     return (
       <>
@@ -179,7 +194,7 @@ function App() {
     return (
         <div className="w-full h-[100vh] flex justify-center items-center bg-white">
             <div className="flex flex-col justify-center items-center gap-4">
-              <img src="/assets/offline.png" className="object-contain w-64 h-auto"/>
+              <img src={imageSrc} className="object-contain w-64 h-auto"/>
               <p className="text-lg font-medium">You appear to be offline</p>
               <p className="text-xs text-gray-500">You can't use Shopkart until you're connected to the internet</p>
               <Button type="primary" onClick={()=>window.location.reload()} className="min-w-24">Retry</Button>

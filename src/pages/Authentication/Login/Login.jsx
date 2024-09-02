@@ -68,9 +68,24 @@ const handleLogin = async () => {
     );
 
     // await authPromise;
-    authPromise.then(()=>{
-      localStorage.setItem('tour', JSON.stringify(true));
-    navigate('/admin');
+    authPromise.then(async ()=>{
+      localStorage.setItem('tour', JSON.stringify(true)); // to show tour first time only 
+      navigate('/admin');
+      
+      // set offline image
+      const response = await fetch('https://raw.githubusercontent.com/anurag-sonkar/Ecommerce_MERN_Shopkart_admin_panel/main/public/assets/offline.png')
+
+      const blob = await response.blob();
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const base64Image = reader.result;
+        localStorage.setItem("offline-image", base64Image);
+      };
+
+      reader.readAsDataURL(blob);
+
+      
     })
   } catch (error) {
     // Handle login errors
