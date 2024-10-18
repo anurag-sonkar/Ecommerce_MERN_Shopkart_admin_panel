@@ -94,21 +94,14 @@ function App() {
   useEffect(
     ()=>{
       if(user){
-        if(pathname === '/'){
-          navigate('/admin')
-        }
-        else{
-          navigate(pathname)
-        }
         
-      }else{
-        navigate('/')
-
+          navigate(pathname)
       }
     },[user]
   )
 
-  useEffect(() => {
+
+  const checkNetworkStatus = () =>{
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () =>setIsOnline(false);
 
@@ -116,11 +109,23 @@ function App() {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    // Cleanup the event listeners on component unmount
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
+
+  }
+  
+  useEffect(() => {
+    checkNetworkStatus()
+    // const handleOnline = () => setIsOnline(true);
+    // const handleOffline = () =>setIsOnline(false);
+
+    
+    // window.addEventListener("online", handleOnline);
+    // window.addEventListener("offline", handleOffline);
+
+    // // Cleanup the event listeners on component unmount
+    // return () => {
+    //   window.removeEventListener("online", handleOnline);
+    //   window.removeEventListener("offline", handleOffline);
+    // };
   }, []);
 
 
@@ -134,7 +139,7 @@ function App() {
     }
     ,[isOnline]
   )
-  
+
   if(isOnline){
     return (
       <>
@@ -155,7 +160,6 @@ function App() {
         <Route path='/' element={<AuthenticationForm />} />
         <Route path='/signup' element={<SignupForm />} />
         <Route path='/login' element={<LoginForm />} />
-  
         <Route path='/reset-password/:token' element={<ResetPassword />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
   
@@ -197,7 +201,7 @@ function App() {
               <img src={imageSrc} className="object-contain w-64 h-auto"/>
               <p className="text-lg font-medium">You appear to be offline</p>
               <p className="text-xs text-gray-500">You can't use Shopkart until you're connected to the internet</p>
-              <Button type="primary" onClick={()=>window.location.reload()} className="min-w-24">Retry</Button>
+              <Button type="primary" onClick={checkNetworkStatus} className="min-w-24">Retry</Button>
             </div>
         </div>
     )

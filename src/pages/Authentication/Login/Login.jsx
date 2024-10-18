@@ -6,8 +6,8 @@ import { login } from "../../../features/auth/authSlice";
 import { toast, Bounce } from "react-toastify";
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("anurag053@gmail.com");
+  const [password, setPassword] = useState("123456");
   const [error, setError] = useState({});
   const [catchError , setCatchError] = useState("") // backend error
   const dispatch = useDispatch();
